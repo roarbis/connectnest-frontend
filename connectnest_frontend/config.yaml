@@ -11,7 +11,7 @@
 #  approximately every six months.
 # ============================================================
 
-name: "Connect Nest Frontend"
+name: "Connect Nest FrontEnd"
 version: "2025.4.0"
 slug: "connectnest_frontend"
 description: "Seamless Technology, Simplified Living. The Connect Nest interface for your smart home hub."
@@ -80,5 +80,6 @@ homeassistant_api: true     # Future: read backup status for System Health widge
 # Watchdog — auto-restart if the ingress endpoint goes down
 watchdog: "http://[HOST]:8099/"
 
-# Add-on store presentation
-image: "ghcr.io/roarbis/connectnest-frontend-{arch}"
+# image: "ghcr.io/roarbis/connectnest-frontend-{arch}"
+# ^ Uncomment post-V1 when pre-built ghcr.io images are published (Path B).
+#   Without this line, HA Supervisor builds the image from the Dockerfile — correct for V1.
