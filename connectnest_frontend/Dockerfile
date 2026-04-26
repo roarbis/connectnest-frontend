@@ -19,6 +19,9 @@ RUN echo "==> [CN] Installing system packages..." \
 # ── Branding assets ───────────────────────────────────────────
 # Copies themes, icons, manifests, panel JS, error page into the image
 COPY rootfs/ /
+# whats-new.json lives at the add-on root (not inside rootfs/) so it needs
+# its own COPY to reach the OVERRIDE_DIR that run.sh expects
+COPY whats-new.json /usr/share/nginx/cn-override/whats-new.json
 RUN echo "==> [CN] rootfs assets copied OK"
 
 # ── Startup script ────────────────────────────────────────────

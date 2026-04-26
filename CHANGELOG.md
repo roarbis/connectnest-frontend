@@ -10,6 +10,16 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.2] — 2026-04-27
+
+### Fixed
+- **Startup crash** — `whats-new.json` was at the add-on root but never copied
+  into the container. `run.sh` called `cp` on a path that didn't exist, and
+  `set -euo pipefail` caused an immediate exit. Added `COPY whats-new.json` to
+  the Dockerfile so it lands at the expected `OVERRIDE_DIR` path.
+
+---
+
 ## [2025.4.1] — 2026-04-27
 
 ### Fixed
@@ -53,5 +63,6 @@ to mirror the Home Assistant Core release it is tested against.
   (planned). Customers running the original add-on should follow
   [docs/UPGRADE-FROM-V2.md](docs/UPGRADE-FROM-V2.md)
 
+[2025.4.2]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.2
 [2025.4.1]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.1
 [2025.4.0]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.0
