@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.2"
+ADDON_VERSION="2025.4.3"
 INGRESS_PORT=8099
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -171,7 +171,8 @@ http {
             sub_filter 'Home Assistant' 'Connect Nest';
             sub_filter 'home-assistant' 'connect-nest';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
-            sub_filter_types text/html text/javascript application/javascript application/json;
+            # text/html is sub_filter's default — listing it explicitly causes a warning
+            sub_filter_types text/javascript application/javascript application/json;
 
             proxy_buffer_size 128k;
             proxy_buffers 8 128k;
@@ -227,6 +228,7 @@ http {
             proxy_set_header Host \$host;
             proxy_set_header X-Real-IP \$remote_addr;
             proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto \$scheme;
             proxy_set_header Upgrade \$http_upgrade;
             proxy_set_header Connection \$connection_upgrade;
             proxy_set_header Accept-Encoding "";
@@ -235,7 +237,7 @@ http {
             sub_filter 'Home Assistant' 'Connect Nest';
             sub_filter 'home-assistant' 'connect-nest';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
-            sub_filter_types text/html text/javascript application/javascript application/json;
+            sub_filter_types text/javascript application/javascript application/json;
 
             proxy_buffer_size 128k;
             proxy_buffers 8 128k;
@@ -340,6 +342,50 @@ if [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
         -d "{\"name\":\"${DEFAULT_THEME}\"}" \
         "http://supervisor/core/api/services/frontend/set_theme" > /dev/null 2>&1 || true
     info "Default theme set to ${DEFAULT_THEME}"
+fi
+
+# ─── Ensure HA trusts nginx as a local proxy ────────────────
+# HA 2024+ validates the Host header and returns 400 if requests arrive via
+# an untrusted proxy. We need trusted_proxies: 127.0.0.1 in the http: block.
+# This is a one-time patch; if an http: block already exists we warn the user.
+CN_NEEDS_HA_RESTART=false
+if ! grep -q "trusted_proxies" /config/configuration.yaml 2>/dev/null; then
+    if ! grep -q "^http:" /config/configuration.yaml 2>/dev/null; then
+        info "Adding http: trusted_proxies to configuration.yaml..."
+        cat >> /config/configuration.yaml << 'YAML_EOF'
+
+# ─── Connect Nest — reverse proxy trust ──────────────────────
+# Allows nginx (127.0.0.1) to proxy requests to HA without triggering
+# the host-header security check (HTTP 400 Bad Request).
+# See: https://www.home-assistant.io/integrations/http/#reverse-proxies
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+# ─── End Connect Nest — reverse proxy trust ───────────────────
+YAML_EOF
+        success "trusted_proxies added — HA Core restart needed to apply"
+        CN_NEEDS_HA_RESTART=true
+    else
+        warn "http: block already exists in configuration.yaml — cannot auto-add trusted_proxies"
+        warn "If port 7080 returns 400, manually add to your http: block:"
+        warn "  use_x_forwarded_for: true"
+        warn "  trusted_proxies:"
+        warn "    - 127.0.0.1"
+        warn "    - ::1"
+        warn "Then restart Home Assistant Core."
+    fi
+fi
+
+# ─── Restart HA Core if proxy trust config was added ────────
+if [[ "${CN_NEEDS_HA_RESTART}" == "true" ]] && [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
+    info "Restarting HA Core to apply trusted_proxies (takes ~45s)..."
+    curl -s -X POST \
+        -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
+        "http://supervisor/core/restart" > /dev/null 2>&1 || true
+    # Give HA time to shut down before we start waiting for it
+    sleep 15
 fi
 
 # ─── Wait for HA Core (best effort) ─────────────────────────

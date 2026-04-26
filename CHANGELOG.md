@@ -10,13 +10,18 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
-## [2025.4.2] — 2026-04-27
+## [2025.4.3] — 2026-04-27
 
 ### Fixed
-- **Startup crash** — `whats-new.json` was at the add-on root but never copied
-  into the container. `run.sh` called `cp` on a path that didn't exist, and
-  `set -euo pipefail` caused an immediate exit. Added `COPY whats-new.json` to
-  the Dockerfile so it lands at the expected `OVERRIDE_DIR` path.
+- **400 Bad Request on port 7080** — HA 2024+ validates the `Host` header and
+  rejects requests from untrusted proxies. `run.sh` now auto-adds an `http:`
+  block with `use_x_forwarded_for: true` and `trusted_proxies: [127.0.0.1, ::1]`
+  to `configuration.yaml` on first run, then restarts HA Core to apply it.
+- **nginx duplicate MIME type warning** — removed `text/html` from
+  `sub_filter_types` (it is sub_filter's implicit default and listing it
+  explicitly generates a harmless but noisy warning).
+- **Missing `X-Forwarded-Proto` header** on direct port (7080) server block —
+  added to match the ingress block.
 
 ---
 
@@ -63,6 +68,6 @@ to mirror the Home Assistant Core release it is tested against.
   (planned). Customers running the original add-on should follow
   [docs/UPGRADE-FROM-V2.md](docs/UPGRADE-FROM-V2.md)
 
-[2025.4.2]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.2
+[2025.4.3]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.3
 [2025.4.1]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.1
 [2025.4.0]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.0
