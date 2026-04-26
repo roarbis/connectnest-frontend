@@ -1,43 +1,61 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
-# Alpine packages — kept minimal: nginx for the overlay, jq for parsing
-# Supervisor options, curl for Supervisor/HA API calls during first-run
-# theme + panel install.
-#
-# Note: we do NOT install python3 here. The setup wizard (which needed
-# python3) lives in a separate add-on. Keeping this image lean.
-RUN apk add --no-cache \
+# ── System packages ───────────────────────────────────────────
+# nginx     : reverse proxy + sub_filter branding overlay
+#             (sub_filter is built into the Alpine nginx package — no extra module needed)
+# jq        : parse /data/options.json in run.sh
+# curl      : Supervisor/HA API calls in run.sh + healthcheck
+# ca-certificates, tzdata : TLS + correct timezone in logs
+RUN echo "==> [CN] Installing system packages..." \
+ && apk add --no-cache \
         nginx \
-        nginx-mod-http-headers-more \
         curl \
         jq \
         ca-certificates \
-        tzdata
+        tzdata \
+ && echo "==> [CN] Packages installed OK"
 
-# Static branding assets (themes, icons, manifest, panel JS, CSS)
+# ── Branding assets ───────────────────────────────────────────
+# Copies themes, icons, manifests, panel JS, error page into the image
 COPY rootfs/ /
+RUN echo "==> [CN] rootfs assets copied OK"
 
-# Download card-mod at build time — needed by the cn_dark theme for the
-# sidebar header override. Pinned to a known-good version; bump when we
-# verify a newer one against the HA version we ship for.
-ARG CARD_MOD_VERSION=3.4.4
-RUN mkdir -p /usr/share/nginx/cn-override \
- && curl -fsSL -o /usr/share/nginx/cn-override/card-mod.js \
-        "https://github.com/thomasloven/lovelace-card-mod/releases/download/${CARD_MOD_VERSION}/card-mod.js"
-
-# Background image — bundled inside the image so customers don't need
-# internet access on first boot to render the login screen properly.
-RUN curl -fsSL -o /usr/share/nginx/cn-override/static/cn-bg.jpg \
-        "https://raw.githubusercontent.com/roarbis/connectnest-frontend/main/connectnest_frontend/rootfs/usr/share/nginx/cn-override/static/cn-bg.jpg" \
-    || echo "cn-bg.jpg not yet in repo — using fallback colour background"
-
-# Make startup script executable + nginx runtime dirs
+# ── Startup script ────────────────────────────────────────────
+COPY run.sh /run.sh
 RUN chmod a+x /run.sh \
- && mkdir -p /run/nginx /var/log/nginx
+ && echo "==> [CN] run.sh installed OK"
 
-# Healthcheck — Supervisor uses the watchdog URL, but having a Docker-level
-# check helps when running the image standalone for testing.
+# ── nginx runtime dirs ────────────────────────────────────────
+RUN mkdir -p /run/nginx /var/log/nginx \
+ && echo "==> [CN] nginx dirs created OK"
+
+# ── card-mod (sidebar header override) ───────────────────────
+# Pinned to a known-good release. Bump the version here when upgrading.
+# Falls back gracefully if GitHub is unreachable at build time.
+ARG CARD_MOD_VERSION=3.4.4
+RUN echo "==> [CN] Downloading card-mod v${CARD_MOD_VERSION}..." \
+ && mkdir -p /usr/share/nginx/cn-override \
+ && ( curl -fsSL -o /usr/share/nginx/cn-override/card-mod.js \
+          "https://github.com/thomasloven/lovelace-card-mod/releases/download/${CARD_MOD_VERSION}/card-mod.js" \
+      || curl -fsSL -o /usr/share/nginx/cn-override/card-mod.js \
+          "https://github.com/thomasloven/lovelace-card-mod/releases/download/v${CARD_MOD_VERSION}/card-mod.js" \
+      || { echo "==> [CN] WARN: card-mod download failed — sidebar title override will not work"; \
+           echo "// card-mod unavailable at build time" > /usr/share/nginx/cn-override/card-mod.js; } \
+    ) \
+ && echo "==> [CN] card-mod step done"
+
+# ── Background image ──────────────────────────────────────────
+# Non-fatal: if cn-bg.jpg hasn't been pushed yet the theme falls back to
+# the solid background-color defined in cn_dark.yaml / cn_light.yaml.
+RUN echo "==> [CN] Fetching background image..." \
+ && mkdir -p /usr/share/nginx/cn-override/static \
+ && curl -fsSL -o /usr/share/nginx/cn-override/static/cn-bg.jpg \
+        "https://raw.githubusercontent.com/roarbis/connectnest-frontend/main/connectnest_frontend/rootfs/usr/share/nginx/cn-override/static/cn-bg.jpg" \
+    || echo "==> [CN] WARN: cn-bg.jpg not in repo yet — using solid colour fallback" \
+ && echo "==> [CN] Background image step done"
+
+# ── Healthcheck ───────────────────────────────────────────────
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -fsS http://127.0.0.1:8099/ > /dev/null || exit 1
 

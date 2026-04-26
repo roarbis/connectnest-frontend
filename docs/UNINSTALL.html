@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uninstall Guide — Connect Nest FrontEnd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Baumans&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #15C7B4;
+      --teal-dark:  #0d9e8f;
+      --teal-light: rgba(21,199,180,0.12);
+      --green-dark: #2c443c;
+      --ink:        #1a2a28;
+      --ink-mid:    #4a6660;
+      --ink-light:  #7a8e8b;
+      --surface:    #f4f8f7;
+      --white:      #ffffff;
+      --border:     #daeae7;
+      --warn-bg:    rgba(222,176,107,0.14);
+      --warn-text:  #7a5010;
+      --warn-border:#d4a84b;
+      --info-bg:    rgba(21,199,180,0.10);
+      --info-text:  #0d6e65;
+      --info-border:#15C7B4;
+      --danger-bg:  rgba(220,80,80,0.10);
+      --danger-text:#8a2020;
+      --danger-border:#dc5050;
+      --code-bg:    #1e2d2b;
+      --code-text:  #a8d8d4;
+      --step-size:  2.25rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--green-dark);
+      color: #cddada;
+      padding: 2.5rem 2rem 2rem;
+    }
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    header img {
+      width: 52px;
+      height: 52px;
+      border-radius: 13px;
+      flex-shrink: 0;
+    }
+    .header-text {}
+    .brand {
+      font-family: 'Baumans', 'Raleway', sans-serif;
+      font-size: 1.5rem;
+      color: var(--teal);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+    }
+    .doc-title {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: #cddada;
+      opacity: 0.85;
+      margin-top: 0.15rem;
+    }
+    .version-pill {
+      display: inline-block;
+      margin-top: 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(21,199,180,0.18);
+      color: var(--teal);
+      padding: 0.2rem 0.65rem;
+      border-radius: 99px;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    /* ── Goal chooser ── */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    @media (max-width: 520px) { .goal-grid { grid-template-columns: 1fr; } }
+
+    .goal-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem 1.25rem;
+      text-decoration: none;
+      color: var(--ink);
+      display: block;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .goal-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 4px var(--teal-light);
+    }
+    .goal-card .goal-icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .goal-card .goal-label {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+    .goal-card .goal-desc {
+      font-size: 0.82rem;
+      color: var(--ink-mid);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+    .goal-card .goal-steps {
+      margin-top: 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--teal-dark);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Section titles ── */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 2.75rem 0 1.25rem;
+    }
+    .section-heading h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .section-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+    }
+    .badge-quick   { background: var(--teal-light); color: var(--teal-dark); }
+    .badge-full    { background: rgba(26,42,40,0.08); color: var(--ink-mid); }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .callout-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 0.05rem; }
+    .callout-body { flex: 1; }
+    .callout-body p { font-size: 0.88rem; line-height: 1.6; }
+    .callout-body strong { font-weight: 700; display: block; margin-bottom: 0.2rem; }
+    .callout.info    { background: var(--info-bg);   border-left: 3px solid var(--info-border);   color: var(--info-text); }
+    .callout.warn    { background: var(--warn-bg);   border-left: 3px solid var(--warn-border);   color: var(--warn-text); }
+    .callout.danger  { background: var(--danger-bg); border-left: 3px solid var(--danger-border); color: var(--danger-text); }
+
+    /* ── Numbered steps ── */
+    .steps { list-style: none; display: flex; flex-direction: column; gap: 1.1rem; margin: 1.25rem 0; }
+    .steps li {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: var(--step-size);
+      height: var(--step-size);
+      min-width: var(--step-size);
+      background: var(--teal);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+    .step-body { flex: 1; padding-top: 0.3rem; }
+    .step-body p { font-size: 0.92rem; line-height: 1.65; }
+    .step-body strong { font-weight: 600; }
+
+    /* ── Sub-steps ── */
+    .sub-steps {
+      list-style: none;
+      margin: 0.6rem 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .sub-steps li {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--ink-mid);
+      line-height: 1.55;
+      align-items: flex-start;
+    }
+    .sub-steps li::before {
+      content: '→';
+      color: var(--teal);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      overflow-x: auto;
+    }
+    .code-block code {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.8rem;
+      color: var(--code-text);
+      line-height: 1.8;
+      white-space: pre;
+    }
+    .code-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 0.35rem;
+    }
+
+    /* ── File list ── */
+    .file-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin: 0.6rem 0;
+    }
+    .file-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+    }
+    .file-list li .file-icon { color: var(--teal); flex-shrink: 0; }
+
+    /* ── Verify checklist ── */
+    .verify-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+    }
+    .verify-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+    }
+    .verify-list li .check {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Summary table ── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .summary-table th {
+      background: var(--green-dark);
+      color: #cddada;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .summary-table td {
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .summary-table tr:nth-child(even) td { background: var(--surface); }
+    .summary-table td:first-child { font-weight: 600; white-space: nowrap; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 99px;
+    }
+    .pill-yes  { background: var(--teal-light); color: var(--teal-dark); }
+    .pill-no   { background: var(--danger-bg);  color: var(--danger-text); }
+    .pill-man  { background: var(--warn-bg);    color: var(--warn-text); }
+
+    /* ── Support footer ── */
+    .support-bar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+    .support-bar .support-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      flex: 0 0 100%;
+    }
+    .support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .support-link:hover { opacity: 0.82; }
+    .support-link.wa    { background: #25D366; color: #fff; }
+    .support-link.email { background: var(--teal-light); color: var(--teal-dark); border: 1px solid rgba(21,199,180,0.3); }
+    .support-link.web   { background: var(--surface); color: var(--ink-mid); border: 1px solid var(--border); }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; }
+      header { background: #1a2a28 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .goal-card, .file-list li, .verify-list li, .support-bar { break-inside: avoid; }
+      .support-link.wa { background: #25D366 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .page { padding-top: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <img src="../connectnest_frontend/rootfs/usr/share/nginx/cn-override/static/icons/cn-icon-192.png"
+         alt="Connect Nest" onerror="this.style.display='none'">
+    <div class="header-text">
+      <div class="brand">Connect Nest</div>
+      <div class="doc-title">FrontEnd Add-on — Uninstall Guide</div>
+      <span class="version-pill">v2025.4.0 · April 2026</span>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ── What do you want to do? ── -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2>What do you want to do?</h2>
+  </div>
+  <p style="color:var(--ink-mid);font-size:0.9rem">Choose your goal below — it determines which steps you need to follow.</p>
+
+  <div class="goal-grid">
+    <a class="goal-card" href="#quick-uninstall">
+      <span class="goal-icon">🔄</span>
+      <div class="goal-label">Upgrade or Reinstall</div>
+      <div class="goal-desc">Removing the add-on so you can put it back again — after a version update or to start fresh.</div>
+      <div class="goal-steps">Step 1 only →</div>
+    </a>
+    <a class="goal-card" href="#full-cleanup">
+      <span class="goal-icon">🧹</span>
+      <div class="goal-label">Full Clean Removal</div>
+      <div class="goal-desc">Removing Connect Nest completely and returning your hub to stock Home Assistant.</div>
+      <div class="goal-steps">Steps 1 – 7 →</div>
+    </a>
+  </div>
+
+  <!-- ── What the add-on touches ── -->
+  <div class="section-heading">
+    <h2>What the add-on writes to your hub</h2>
+  </div>
+  <p style="color:var(--ink-mid);font-size:0.9rem;margin-bottom:1rem">
+    Home Assistant does not give add-ons an automatic cleanup hook on uninstall,
+    so the files below must be removed manually if you want a full clean removal.
+  </p>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>What</th>
+        <th>Location</th>
+        <th>Removed by UI uninstall?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Add-on container &amp; image</td>
+        <td>Docker (internal)</td>
+        <td><span class="pill pill-yes">✓ Yes</span></td>
+      </tr>
+      <tr>
+        <td>Dark theme file</td>
+        <td><code>/config/themes/cn_dark.yaml</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>Light theme file</td>
+        <td><code>/config/themes/cn_light.yaml</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>About panel JS</td>
+        <td><code>/config/www/cn-about-panel.js</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>Branding scripts</td>
+        <td><code>/config/www/cn-init.js</code>, <code>cn-scrubber.js</code>, <code>cn-hide-leaks.js</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>What's New data</td>
+        <td><code>/config/www/cn-whats-new.json</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>card-mod library</td>
+        <td><code>/config/www/card-mod.js</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+      <tr>
+        <td>configuration.yaml block</td>
+        <td><code>/config/configuration.yaml</code> (frontend + panel_custom)</td>
+        <td><span class="pill pill-man">Manual edit</span></td>
+      </tr>
+      <tr>
+        <td>Lovelace resource</td>
+        <td>HA Lovelace resources table</td>
+        <td><span class="pill pill-man">Manual removal</span></td>
+      </tr>
+      <tr>
+        <td>Setup marker</td>
+        <td><code>/config/.cn_frontend_setup_done</code></td>
+        <td><span class="pill pill-no">✗ No</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider" id="quick-uninstall">
+
+  <!-- ── STEP 1: Quick Uninstall ── -->
+  <div class="section-heading">
+    <h2>Step 1 — Remove the Add-on</h2>
+    <span class="section-badge badge-quick">All users start here</span>
+  </div>
+
+  <ol class="steps">
+    <li>
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <p>In Home Assistant, go to <strong>Settings → Add-ons</strong></p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <p>Click <strong>Connect Nest FrontEnd</strong> in your installed add-ons list</p>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <p>Scroll to the bottom and click <strong>Uninstall</strong>. Confirm when prompted.</p>
+        <p style="font-size:0.85rem;color:var(--ink-mid);margin-top:0.4rem">The add-on stops immediately and the container is removed. Your hub reverts to the standard Home Assistant interface.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout info">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body">
+      <strong>Reinstalling or upgrading?</strong>
+      <p>You're done at this step. Go back to the Add-on Store and install the new version. The setup marker file means <code>run.sh</code> won't re-patch <code>configuration.yaml</code>, but it will always refresh the theme and JS files.</p>
+    </div>
+  </div>
+
+  <hr class="divider" id="full-cleanup">
+
+  <!-- ── FULL CLEANUP ── -->
+  <div class="section-heading">
+    <h2>Full Clean Removal</h2>
+    <span class="section-badge badge-full">Steps 2 – 7</span>
+  </div>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>You need file system access</strong>
+      <p>Use the <strong>File Editor</strong> add-on, <strong>Studio Code Server</strong>, or SSH to complete these steps. If you don't have one of these installed, install the <em>File Editor</em> add-on from the Add-on Store first.</p>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 2 — Remove theme files</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid)">Delete these two files from your hub's <code>/config/themes/</code> folder:</p>
+  <ul class="file-list">
+    <li><span class="file-icon">🎨</span>/config/themes/cn_dark.yaml</li>
+    <li><span class="file-icon">🎨</span>/config/themes/cn_light.yaml</li>
+  </ul>
+  <div class="callout info" style="margin-top:0.75rem">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <p><strong>In File Editor:</strong> navigate to <code>config/themes/</code> → click the three-dot menu next to each file → <strong>Delete</strong></p>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 3 — Remove panel and branding scripts</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid)">Delete these files from <code>/config/www/</code>:</p>
+  <ul class="file-list">
+    <li><span class="file-icon">📄</span>/config/www/cn-about-panel.js</li>
+    <li><span class="file-icon">📄</span>/config/www/cn-init.js</li>
+    <li><span class="file-icon">📄</span>/config/www/cn-scrubber.js</li>
+    <li><span class="file-icon">📄</span>/config/www/cn-hide-leaks.js</li>
+    <li><span class="file-icon">📄</span>/config/www/cn-whats-new.json</li>
+    <li><span class="file-icon">📄</span>/config/www/card-mod.js</li>
+  </ul>
+
+  <!-- Step 4 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 4 — Edit configuration.yaml</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem">Open <code>/config/configuration.yaml</code> and remove the Connect Nest block. It looks exactly like this:</p>
+
+  <div class="code-label">Remove this entire block (including the comment lines)</div>
+  <div class="code-block"><code># ─── Connect Nest Frontend ─────────────────────────────────
+# Auto-added by the Connect Nest Frontend add-on.
+# Edit with care — incorrect changes will break the branded UI.
+frontend:
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /local/card-mod.js
+    - /local/cn-init.js
+
+panel_custom:
+  - name: cn-about
+    sidebar_title: About Connect Nest
+    sidebar_icon: mdi:information-outline
+    url_path: cn-about
+    module_url: /local/cn-about-panel.js
+    embed_iframe: false
+    require_admin: false
+# ─── End Connect Nest Frontend ─────────────────────────────</code></div>
+
+  <div class="callout danger" style="margin-top:0.75rem">
+    <span class="callout-icon">🚨</span>
+    <div class="callout-body">
+      <strong>YAML is sensitive to indentation</strong>
+      <p>Make sure no extra blank lines, spaces, or indentation errors remain after deleting the block. A malformed <code>configuration.yaml</code> will stop Home Assistant from starting.</p>
+      <p style="margin-top:0.4rem">After saving, use <strong>Developer Tools → Check Configuration</strong> to validate before restarting.</p>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 5 — Delete the setup marker</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem">This hidden file tells the add-on that first-run setup has already been done. Delete it so a future reinstall works cleanly.</p>
+  <ul class="file-list">
+    <li><span class="file-icon">🗂️</span>/config/.cn_frontend_setup_done</li>
+  </ul>
+  <div class="callout info" style="margin-top:0.75rem">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <p><strong>In File Editor:</strong> click the gear icon → enable <em>Show hidden files</em> → navigate to <code>config/</code> → delete <code>.cn_frontend_setup_done</code></p>
+      <p style="margin-top:0.3rem"><strong>Via SSH:</strong> <code>rm /config/.cn_frontend_setup_done</code></p>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 6 — Remove the Lovelace resource</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem">The add-on registered <code>card-mod.js</code> as a Lovelace resource via the HA API. Remove it from the dashboard resources list.</p>
+  <ol class="steps" style="margin-top:0.5rem">
+    <li>
+      <span class="step-num">1</span>
+      <div class="step-body"><p>Go to <strong>Settings → Dashboards</strong></p></div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div class="step-body"><p>Click the <strong>three-dot menu ⋮</strong> (top right) → <strong>Resources</strong></p>
+        <div class="callout info" style="margin-top:0.5rem">
+          <span class="callout-icon">💡</span>
+          <div class="callout-body"><p>If <strong>Resources</strong> is not visible, go to your <strong>Profile</strong> and enable <em>Advanced Mode</em> first.</p></div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <span class="step-num">3</span>
+      <div class="step-body"><p>Find <code>/local/card-mod.js</code> in the list and click the <strong>bin 🗑</strong> icon to delete it</p></div>
+    </li>
+  </ol>
+
+  <!-- Step 7 -->
+  <div class="section-heading" style="margin-top:2rem">
+    <h2 style="font-size:1.05rem">Step 7 — Restart Home Assistant Core</h2>
+  </div>
+  <ol class="steps">
+    <li>
+      <span class="step-num">1</span>
+      <div class="step-body"><p>Go to <strong>Developer Tools</strong> (or <strong>Settings → System → Restart</strong>)</p></div>
+    </li>
+    <li>
+      <span class="step-num">2</span>
+      <div class="step-body"><p>Click <strong>Restart Home Assistant</strong> and wait approximately 60 seconds</p></div>
+    </li>
+  </ol>
+
+  <!-- Verify -->
+  <hr class="divider">
+  <div class="section-heading">
+    <h2>Verify the removal is complete</h2>
+  </div>
+  <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem">After restart, tick each item to confirm everything is clean:</p>
+
+  <ul class="verify-list">
+    <li>
+      <span class="check"></span>
+      Sidebar no longer shows <strong>"About Connect Nest"</strong>
+    </li>
+    <li>
+      <span class="check"></span>
+      Theme dropdown (Profile page) no longer lists <code>cn_dark</code> or <code>cn_light</code>
+    </li>
+    <li>
+      <span class="check"></span>
+      Browser tab says <strong>"Home Assistant"</strong>, not "Connect Nest"
+    </li>
+    <li>
+      <span class="check"></span>
+      <strong>Settings → Dashboards → Resources</strong> — no <code>/local/card-mod.js</code> or <code>/local/cn-*</code> entries
+    </li>
+    <li>
+      <span class="check"></span>
+      HA logs show no errors related to missing <code>cn-init.js</code> or <code>cn-about-panel.js</code>
+    </li>
+  </ul>
+
+  <!-- Reinstall note -->
+  <hr class="divider">
+  <div class="section-heading">
+    <h2>Reinstalling after a full cleanup</h2>
+  </div>
+  <div class="callout info">
+    <span class="callout-icon">✅</span>
+    <div class="callout-body">
+      <p>After completing all 7 steps, reinstalling the add-on works exactly like a brand new install. With the marker file gone, <code>run.sh</code> will re-patch <code>configuration.yaml</code> and re-copy all theme and panel files automatically.</p>
+    </div>
+  </div>
+
+  <!-- Support -->
+  <div class="support-bar">
+    <span class="support-label">Need help?</span>
+    <a class="support-link wa"
+       href="https://wa.me/61492970809?text=Hi%20Connect%20Nest%20support%2C%20I%20need%20help%20uninstalling%20the%20frontend%20add-on"
+       target="_blank" rel="noopener">
+      💬 WhatsApp
+    </a>
+    <a class="support-link email" href="mailto:hello@connectnest.com.au">
+      📧 hello@connectnest.com.au
+    </a>
+    <a class="support-link web" href="https://connectnest.com.au" target="_blank" rel="noopener">
+      🌐 connectnest.com.au
+    </a>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
