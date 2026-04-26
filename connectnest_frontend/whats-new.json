@@ -1,13 +1,14 @@
 {
-  "current": "2025.4.3",
+  "current": "2025.4.4",
   "releases": [
     {
-      "version": "2025.4.3",
+      "version": "2025.4.4",
       "date": "2026-04-27",
-      "title": "Startup fix",
+      "title": "Sidebar logo + login branding",
       "highlights": [
-        "Fixed add-on crash on startup (missing whats-new.json in container)",
-        "All core features now confirmed working end-to-end"
+        "Connect Nest logo now shows above 'Connect Hub' in the sidebar",
+        "Login page now shows CN logo, brand name, and tagline",
+        "Logo applies to both dark and light themes"
       ]
     },
     {

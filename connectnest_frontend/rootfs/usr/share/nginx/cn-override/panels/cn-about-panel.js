@@ -2,7 +2,7 @@
 // Registered as panel_custom (name: cn-about) in configuration.yaml.
 // Displays branding, What's New, System Health, and contact info.
 
-const VERSION = '2025.4.3';
+const VERSION = '2025.4.4';
 
 const STYLES = `
   :host {

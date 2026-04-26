@@ -5,6 +5,16 @@ cn_light:
       .menu .title {
         display: none !important;
       }
+      .menu:before {
+        content: "";
+        display: block;
+        width: 52px;
+        height: 52px;
+        background: url('/static/icons/cn-icon-96.png') no-repeat center;
+        background-size: contain;
+        margin: 14px auto 4px;
+        border-radius: 14px;
+      }
       .menu:after {
         content: "Connect Hub";
         margin-left: 1px;
