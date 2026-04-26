@@ -48,15 +48,8 @@ RUN echo "==> [CN] Downloading card-mod v${CARD_MOD_VERSION}..." \
     ) \
  && echo "==> [CN] card-mod step done"
 
-# ── Background image ──────────────────────────────────────────
-# Non-fatal: if cn-bg.jpg hasn't been pushed yet the theme falls back to
-# the solid background-color defined in cn_dark.yaml / cn_light.yaml.
-RUN echo "==> [CN] Fetching background image..." \
- && mkdir -p /usr/share/nginx/cn-override/static \
- && curl -fsSL -o /usr/share/nginx/cn-override/static/cn-bg.jpg \
-        "https://raw.githubusercontent.com/roarbis/connectnest-frontend/main/connectnest_frontend/rootfs/usr/share/nginx/cn-override/static/cn-bg.jpg" \
-    || echo "==> [CN] WARN: cn-bg.jpg not in repo yet — using solid colour fallback" \
- && echo "==> [CN] Background image step done"
+# cn-bg.png is bundled in rootfs/ and copied by the COPY rootfs/ step above.
+RUN echo "==> [CN] Background image bundled in rootfs OK"
 
 # ── Healthcheck ───────────────────────────────────────────────
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

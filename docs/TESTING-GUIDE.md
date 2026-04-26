@@ -1,7 +1,7 @@
 # Connect Nest Frontend — Testing Guide
 
 **For: Connect Nest testing partner**
-**Version:** 2025.4.4
+**Version:** 2025.4.5
 **Date:** April 2026
 
 ---
@@ -111,7 +111,7 @@ You should see a panel with these sections — tick each one:
 - [ ] Connect Nest logo/icon visible
 - [ ] **"Connect Nest"** heading in large teal text
 - [ ] **"Turn On Smart Living"** tagline below it
-- [ ] A version badge like `v2025.4.4`
+- [ ] A version badge like `v2025.4.5`
 
 ### 4B. About section
 - [ ] A short paragraph about Connect Nest — should NOT mention Home Assistant

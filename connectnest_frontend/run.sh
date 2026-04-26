@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.4"
+ADDON_VERSION="2025.4.5"
 INGRESS_PORT=8099
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -123,8 +123,8 @@ http {
         }
 
         # CN background image
-        location = /cn-bg.jpg {
-            alias ${OVERRIDE_DIR}/static/cn-bg.jpg;
+        location = /cn-bg.png {
+            alias ${OVERRIDE_DIR}/static/cn-bg.png;
             expires 30d;
             add_header Cache-Control "public";
         }
@@ -202,8 +202,8 @@ http {
             expires 30d;
         }
 
-        location = /cn-bg.jpg {
-            alias ${OVERRIDE_DIR}/static/cn-bg.jpg;
+        location = /cn-bg.png {
+            alias ${OVERRIDE_DIR}/static/cn-bg.png;
             expires 30d;
             add_header Cache-Control "public";
         }

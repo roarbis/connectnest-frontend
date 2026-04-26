@@ -10,13 +10,20 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
-## [2025.4.4] — 2026-04-27
+## [2025.4.5] — 2026-04-27
 
 ### Added
-- **CN logo in sidebar** — Connect Nest icon now appears above "Connect Hub" text in
-  both `cn_dark` and `cn_light` themes, using card-mod CSS `menu:before`.
-- **Login page logo** — CN icon, brand name, and tagline injected above the login
-  form via `cn-init.js` MutationObserver targeting the `ha-auth-flow` shadow DOM.
+- **CN logo in sidebar** — Connect Nest icon appears above "Connect Hub" in both themes
+- **Login page logo** — CN icon, brand name, and tagline above the login form
+- **Sidebar quick-links** — Devices, Automations, Dashboards, Apps shortcuts injected
+  below the main nav via `cn-init.js`
+- **User avatar override** — profile badge replaced with CN icon instead of initials
+- **Branded notification toasts** — teal accent colours applied to snackbars and alerts
+- **Custom "page not found" screen** — CN-styled 404 with navigation and WhatsApp link
+- **Background wallpaper bundled** — `cn-bg.png` now ships inside the add-on image;
+  no longer fetched from GitHub at build time (faster installs, works offline)
+- **Add-on store icon** — `icon.png` added so the add-on shows the CN logo in
+  Settings → Apps
 
 ### Fixed
 - **400 Bad Request on port 7080** — HA 2024+ validates the `Host` header and
@@ -74,6 +81,6 @@ to mirror the Home Assistant Core release it is tested against.
   (planned). Customers running the original add-on should follow
   [docs/UPGRADE-FROM-V2.md](docs/UPGRADE-FROM-V2.md)
 
-[2025.4.4]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.4
+[2025.4.5]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.5
 [2025.4.1]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.1
 [2025.4.0]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.0
