@@ -1,0 +1,35 @@
+# Changelog
+
+All notable changes to Connect Nest Frontend are documented here. Customers see a
+short version of these notes inside the **About Connect Nest** panel — see
+[`whats-new.json`](connectnest_frontend/whats-new.json).
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
+this project adheres to [Calendar Versioning](https://calver.org/) (`YYYY.MM.PATCH`)
+to mirror the Home Assistant Core release it is tested against.
+
+---
+
+## [2025.4.0] — 2026-04-30
+
+### Added
+- First release as a standalone Home Assistant add-on (split from the original
+  monolithic Connect Nest add-on)
+- Brand-new **About Connect Nest** panel — replaces the Home Assistant About page
+  with Connect Nest mission, contact, version, and live system health
+- **What's New** section inside the About panel, driven by `whats-new.json`
+- **System Health** widget — at-a-glance hub, internet, and backup status
+- One-tap **WhatsApp**, email, and phone support links
+- DOM-level branding cleanup that catches lazy-loaded strings as panels open
+- Custom light theme (`cn_light`) for daytime use, alongside the existing dark theme
+
+### Changed
+- Default theme remains `cn_dark` for new installs
+- Tagline aligned with the live website ("Turn On Smart Living")
+
+### Removed
+- Onboarding wizard — moved to the separate `connectnest-wizard` repository
+  (planned). Customers running the original add-on should follow
+  [docs/UPGRADE-FROM-V2.md](docs/UPGRADE-FROM-V2.md)
+
+[2025.4.0]: https://github.com/roarbis/connectnest-frontend/releases/tag/2025.4.0

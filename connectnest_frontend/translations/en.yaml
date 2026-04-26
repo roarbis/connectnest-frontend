@@ -1,0 +1,25 @@
+configuration:
+  ha_port:
+    name: Home Assistant Port
+    description: >-
+      The port your Home Assistant Core is listening on. Default is 8123.
+      Most customers should leave this alone.
+  default_theme:
+    name: Default Theme
+    description: >-
+      The Connect Nest theme to apply on first install. Customers can switch
+      between cn_dark and cn_light any time from Connect Nest → Profile.
+  ssl:
+    name: Enable SSL
+    description: >-
+      Serve Connect Nest over HTTPS. Requires a valid certificate file
+      and key file in the /ssl folder. Most LAN-only installs leave this off.
+  certfile:
+    name: SSL Certificate
+    description: Filename of the SSL certificate inside /ssl. Default fullchain.pem.
+  keyfile:
+    name: SSL Private Key
+    description: Filename of the SSL private key inside /ssl. Default privkey.pem.
+network:
+  80/tcp: Web interface (HTTP) — your customers add this to their iPhone home screen
+  443/tcp: Web interface (HTTPS, optional)

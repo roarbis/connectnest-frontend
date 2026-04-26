@@ -1,0 +1,24 @@
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python (in case anything sneaks in during build/testing)
+__pycache__/
+*.pyc
+
+# Local secrets / tests
+.env
+.env.local
+*.local.yaml
+
+# Build artefacts
+*.tar
+*.zip
+build/

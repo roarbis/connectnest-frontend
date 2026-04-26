@@ -1,0 +1,18 @@
+{
+  "current": "2025.4.0",
+  "releases": [
+    {
+      "version": "2025.4.0",
+      "date": "2026-04-30",
+      "title": "Connect Nest Frontend — first standalone release",
+      "highlights": [
+        "Brand-new About Connect Nest panel — replaces the old About page",
+        "One-tap WhatsApp, email, and phone support inside the app",
+        "Live System Health widget — at a glance check on your hub",
+        "New cn_light theme for daytime use, alongside cn_dark",
+        "Cleaner sidebar — less clutter, more Connect Nest",
+        "Faster startup on first install"
+      ]
+    }
+  ]
+}

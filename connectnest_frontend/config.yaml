@@ -1,0 +1,84 @@
+# ============================================================
+#  Connect Nest Frontend — Add-on Manifest
+#
+#  Re-skins Home Assistant with Connect Nest branding.
+#  This add-on is intentionally narrow: it does ONE thing —
+#  brand the interface. The setup wizard is a separate add-on
+#  (connectnest-wizard, post-v1).
+#
+#  Versioning (CalVer): YYYY.MM.PATCH mirrors the Home Assistant
+#  Core release this version was tested against. We release
+#  approximately every six months.
+# ============================================================
+
+name: "Connect Nest Frontend"
+version: "2025.4.0"
+slug: "connectnest_frontend"
+description: "Seamless Technology, Simplified Living. The Connect Nest interface for your smart home hub."
+url: "https://github.com/roarbis/connectnest-frontend"
+
+# Minimum HA version — anything from 2024.1 onwards works
+homeassistant: "2024.1.0"
+
+# Architectures we publish for
+arch:
+  - amd64      # NUCs, generic x86 mini-PCs (most CN installs)
+  - aarch64    # Raspberry Pi 4/5
+  - armv7      # Raspberry Pi 3
+  - armhf      # Older ARM
+  - i386       # Legacy 32-bit (rare)
+
+# Direct browser access on port 7080. PWA install URL points here.
+ports:
+  80/tcp: 7080
+  443/tcp: 7443
+
+ports_description:
+  80/tcp: "Connect Nest web interface (HTTP) — open this on your iPhone to add the PWA"
+  443/tcp: "Connect Nest web interface (HTTPS, optional)"
+
+# User-configurable options shown in the HA UI
+options:
+  ha_port: 8123
+  default_theme: "cn_dark"
+  ssl: false
+  certfile: "fullchain.pem"
+  keyfile: "privkey.pem"
+
+schema:
+  ha_port: int
+  default_theme: list(cn_dark|cn_light)
+  ssl: bool
+  certfile: str
+  keyfile: str
+
+# Required to reach HA Core on localhost
+host_network: true
+
+# Embed in HA sidebar as "Connect Nest" (in addition to direct port access)
+ingress: true
+ingress_port: 8099
+panel_icon: "mdi:home-lightning-bolt-outline"
+panel_title: "Connect Nest"
+panel_admin: false
+
+# Filesystem access we need
+map:
+  - ssl                     # SSL cert directory
+  - config:rw               # Install theme + panel JS into HA config
+
+# Boot
+startup: "application"
+boot: "auto"
+init: false
+
+# APIs
+hassio_api: true            # Read HA version, register Lovelace resources (card-mod)
+hassio_role: "manager"      # Required for Lovelace resources API
+homeassistant_api: true     # Future: read backup status for System Health widget
+
+# Watchdog — auto-restart if the ingress endpoint goes down
+watchdog: "http://[HOST]:8099/"
+
+# Add-on store presentation
+image: "ghcr.io/roarbis/connectnest-frontend-{arch}"
