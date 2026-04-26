@@ -1,6 +1,17 @@
 {
-  "current": "2025.4.0",
+  "current": "2025.4.1",
   "releases": [
+    {
+      "version": "2025.4.1",
+      "date": "2026-04-27",
+      "title": "Installation fix + uninstall guide",
+      "highlights": [
+        "Fixed installation failure on first-time install (Dockerfile build error)",
+        "Improved build diagnostics — Supervisor logs now show step-by-step progress",
+        "New detailed uninstall guide in the docs folder",
+        "Display name updated to Connect Nest FrontEnd"
+      ]
+    },
     {
       "version": "2025.4.0",
       "date": "2026-04-30",
