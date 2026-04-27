@@ -1,6 +1,15 @@
 {
-  "current": "2025.4.9",
+  "current": "2025.4.10",
   "releases": [
+    {
+      "version": "2025.4.10",
+      "date": "2026-04-28",
+      "title": "Readable dropdowns + dialog text",
+      "highlights": [
+        "Fixed white-on-light dropdown text in Profile, Settings and dialog windows",
+        "All three themes now cover the full Material Web variable set used by HA 2026.4"
+      ]
+    },
     {
       "version": "2025.4.9",
       "date": "2026-04-27",

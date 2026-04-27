@@ -50,10 +50,24 @@ cn_light:
   disabled-text-color: "#b0bab8"
   primary-color: "var(--accent-color)"
   # Text Fields and Dropdown
+  # ─── Text Fields, Dropdowns, Selects ─────────────────────
+  # Aggressive coverage matching cn_dark — same set of variables but
+  # with light fills + dark text for legibility on the light theme.
   mdc-text-field-fill-color: "#eef3f1"
   mdc-text-field-ink-color: "var(--text-color)"
-  mdc-select-fill-color: "#eef3f1"
   mdc-text-field-label-ink-color: "var(--secondary-text-color)"
+  mdc-text-field-idle-line-color: "#c8d8d4"
+  mdc-text-field-hover-line-color: "var(--accent-color)"
+  mdc-select-fill-color: "#eef3f1"
+  mdc-select-ink-color: "var(--text-color)"
+  mdc-select-label-ink-color: "var(--secondary-text-color)"
+  mdc-select-idle-line-color: "#c8d8d4"
+  mdc-select-hover-line-color: "var(--accent-color)"
+  mdc-select-dropdown-icon-color: "var(--secondary-text-color)"
+  mdc-menu-surface-fill-color: "#ffffff"
+  mdc-theme-on-surface: "var(--text-color)"
+  mdc-theme-text-primary-on-background: "var(--text-color)"
+  mdc-theme-text-secondary-on-background: "var(--secondary-text-color)"
   input-fill-color: "#eef3f1"
   input-ink-color: "var(--text-color)"
   input-label-ink-color: "var(--secondary-text-color)"

@@ -10,6 +10,20 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.10] — 2026-04-28
+
+### Fixed
+- **Illegible dropdown text in Profile / settings dialogs** (`cn_dark` and
+  `cn_glass`) — HA 2026.4 reads a wider set of `mdc-*` and `mwc-*` variables
+  for filled text fields and selects than older releases. Our themes had only
+  set the legacy subset, leaving the fill colour to fall back to a near-default
+  light shade while text stayed white → unreadable. All three themes now
+  comprehensively override `mdc-text-field-*`, `mdc-select-*`, `mdc-menu-surface-*`,
+  and `mdc-theme-on-surface` with explicit dark fills (cn_dark / cn_glass) or
+  light fills (cn_light) and matching contrast text colours.
+
+---
+
 ## [2025.4.9] — 2026-04-27
 
 ### Fixed
