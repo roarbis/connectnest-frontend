@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.10"
+ADDON_VERSION="2025.4.11"
 INGRESS_PORT=8919
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -123,10 +123,11 @@ http {
         }
 
         # CN background image
-        location = /cn-bg.png {
-            alias ${OVERRIDE_DIR}/static/cn-bg.png;
+        location = /cn-bg.webp {
+            alias ${OVERRIDE_DIR}/static/cn-bg.webp;
             expires 1d;
             add_header Cache-Control "public, max-age=86400";
+            add_header Content-Type "image/webp";
         }
 
         # WebSocket — required for real-time HA state updates
@@ -172,6 +173,9 @@ http {
             sub_filter 'home-assistant' 'connect-nest';
             # Strip Apple Smart App Banner that pushes the HA Companion app
             sub_filter '<meta name="apple-itunes-app" content="app-id=1099568401">' '';
+            # Replace HA's favicon and mask-icon with CN equivalents
+            sub_filter '<link rel="icon" href="/static/icons/favicon.ico">' '<link rel="icon" type="image/png" sizes="128x128" href="/static/icons/cn-icon-128.png"><link rel="icon" type="image/png" sizes="48x48" href="/static/icons/cn-icon-48.png">';
+            sub_filter '<link rel="mask-icon" href="/static/icons/mask-icon.svg" color="#18bcf2">' '<link rel="mask-icon" href="/static/icons/cn-icon-96.png" color="#15C7B4">';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
             # text/html is sub_filter's default — listing it explicitly causes a warning
             sub_filter_types text/javascript application/javascript application/json;
@@ -204,10 +208,11 @@ http {
             expires 30d;
         }
 
-        location = /cn-bg.png {
-            alias ${OVERRIDE_DIR}/static/cn-bg.png;
+        location = /cn-bg.webp {
+            alias ${OVERRIDE_DIR}/static/cn-bg.webp;
             expires 1d;
             add_header Cache-Control "public, max-age=86400";
+            add_header Content-Type "image/webp";
         }
 
         location /api/websocket {
@@ -240,6 +245,9 @@ http {
             sub_filter 'home-assistant' 'connect-nest';
             # Strip Apple Smart App Banner that pushes the HA Companion app
             sub_filter '<meta name="apple-itunes-app" content="app-id=1099568401">' '';
+            # Replace HA's favicon and mask-icon with CN equivalents
+            sub_filter '<link rel="icon" href="/static/icons/favicon.ico">' '<link rel="icon" type="image/png" sizes="128x128" href="/static/icons/cn-icon-128.png"><link rel="icon" type="image/png" sizes="48x48" href="/static/icons/cn-icon-48.png">';
+            sub_filter '<link rel="mask-icon" href="/static/icons/mask-icon.svg" color="#18bcf2">' '<link rel="mask-icon" href="/static/icons/cn-icon-96.png" color="#15C7B4">';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
             sub_filter_types text/javascript application/javascript application/json;
 

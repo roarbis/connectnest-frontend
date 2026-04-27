@@ -10,6 +10,34 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.11] — 2026-04-28
+
+### Added
+- **Branded "Forgot password?" link on login page** — appended below the auth
+  form via `cn-init.js`. One-tap WhatsApp message to CN support
+  (`+61 492 970 809`) plus a `tel:` fallback. Replaces silent failure when
+  customers forget passwords with an explicit human-contact path.
+- **Hub-offline banner** — slides down from the top of every page when the
+  WebSocket connection drops for 4+ seconds. Includes a "Get help" link to
+  WhatsApp. Hides automatically on reconnect. Polled every 2s, requires two
+  consecutive offline samples before showing (avoids flashing during normal
+  page transitions or auth refreshes).
+
+### Changed
+- **Wallpaper format `cn-bg.png` → `cn-bg.webp`** — 1.4 MB → 66 KB, ~95.5%
+  smaller with no perceptible quality loss at q90. iOS 14+ Safari supports
+  WebP universally, so safe for the customer base. nginx location block,
+  Dockerfile reference and theme `background-image:` URLs all updated in
+  lockstep. Cache headers unchanged (1 day).
+- **CN favicon override** — `nginx sub_filter` now replaces HA's
+  `<link rel="icon" href="/static/icons/favicon.ico">` with two CN PNGs
+  (128×128 and 48×48). Browser tabs, bookmarks and history entries now show
+  the Connect Nest icon instead of HA's blue diamond.
+- **CN mask-icon override** — Safari pinned-tabs and macOS Dock icons now
+  pick up the CN icon at the CN teal accent colour instead of HA's blue.
+
+---
+
 ## [2025.4.10] — 2026-04-28
 
 ### Fixed

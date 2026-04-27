@@ -1,6 +1,17 @@
 {
-  "current": "2025.4.10",
+  "current": "2025.4.11",
   "releases": [
+    {
+      "version": "2025.4.11",
+      "date": "2026-04-28",
+      "title": "Branded favicon, faster wallpaper, password help",
+      "highlights": [
+        "Connect Nest icon now shows in browser tabs and bookmarks (was Home Assistant's blue diamond)",
+        "Wallpaper download cut by 95% — faster page loads on mobile data",
+        "Forgot password? Tap the new help link on the login screen to message Connect Nest support directly",
+        "Hub offline? A friendly banner now appears with a quick 'Get help' link"
+      ]
+    },
     {
       "version": "2025.4.10",
       "date": "2026-04-28",

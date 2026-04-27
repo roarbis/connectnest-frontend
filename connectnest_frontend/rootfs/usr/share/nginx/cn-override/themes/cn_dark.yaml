@@ -28,7 +28,7 @@ cn_dark:
         font-family: baumans;
       }
   # Global
-  background-image: "center / cover no-repeat fixed url('/cn-bg.png')"
+  background-image: "center / cover no-repeat fixed url('/cn-bg.webp')"
   lovelace-background: var(--background-image)
   # Fonts
   primary-font-family: "Raleway,sans-serif"

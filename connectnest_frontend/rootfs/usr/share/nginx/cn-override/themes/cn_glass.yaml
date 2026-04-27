@@ -15,8 +15,8 @@ cn_glass:
   card-mod-theme: cn_glass
 
   # ─── Global wallpaper ────────────────────────────────────
-  # Bundled inside the add-on — served by nginx at /cn-bg.png
-  background-image: "center / cover no-repeat fixed url('/cn-bg.png')"
+  # Bundled inside the add-on — served by nginx at /cn-bg.webp
+  background-image: "center / cover no-repeat fixed url('/cn-bg.webp')"
   lovelace-background: "var(--background-image)"
 
   # ─── Fonts ───────────────────────────────────────────────

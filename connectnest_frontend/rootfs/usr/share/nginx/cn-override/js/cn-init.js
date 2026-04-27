@@ -28,6 +28,7 @@ import { initHideLeaks }  from '/local/cn-hide-leaks.js';
     initToastBranding();    // item 6 — branded notifications
     initNotFoundGuard();    // item 7 — custom 404 screen
     initSidebarExtras();    // quick-links + user avatar
+    initHubOfflineBanner(); // item 2 — visible feedback when WebSocket drops
   });
 })();
 
@@ -48,6 +49,25 @@ function injectLoginLogo() {
     return wrap;
   }
 
+  // Forgot-password helper appended below the auth form
+  function buildForgotHelp() {
+    const help = document.createElement('div');
+    help.id = 'cn-login-help';
+    help.style.cssText = 'margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-family:Raleway,sans-serif;font-size:13px;line-height:1.7;';
+    help.innerHTML = `
+      <div style="color:#aaa;margin-bottom:6px;">Forgot your password?</div>
+      <a href="https://wa.me/61492970809?text=Hi%20Connect%20Nest%2C%20I%20need%20help%20signing%20in%20to%20my%20hub"
+         target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:6px;color:#15C7B4;text-decoration:none;font-weight:600;">
+        <span>💬 Message Connect Nest support</span>
+      </a>
+      <div style="color:#666;font-size:12px;margin-top:10px;">
+        or call <a href="tel:+61492970809" style="color:#15C7B4;text-decoration:none;">+61 492 970 809</a>
+      </div>
+    `;
+    return help;
+  }
+
   function tryInject(root) {
     if (!root) return;
     if (root.querySelector && root.querySelector('#' + LOGO_ID)) return;
@@ -56,7 +76,14 @@ function injectLoginLogo() {
       const inner = authFlow.shadowRoot;
       if (inner.querySelector('#' + LOGO_ID)) return;
       const target = inner.querySelector('.card-content, form, ha-form');
-      if (target) inner.insertBefore(buildLogo(), target);
+      if (target) {
+        inner.insertBefore(buildLogo(), target);
+        // Forgot-password help appended after the form, only if not already there
+        if (!inner.querySelector('#cn-login-help')) {
+          const formContainer = target.parentElement || inner;
+          formContainer.appendChild(buildForgotHelp());
+        }
+      }
     }
   }
 
@@ -303,4 +330,65 @@ function initSidebarExtras() {
     const sidebar = ha.shadowRoot.querySelector('ha-sidebar');
     if (sidebar) { injectLinks(sidebar); patchUserBadge(sidebar); injected = true; }
   }, 800);
+}
+
+// ─── Item 2 — Hub offline banner ──────────────────────────────────────────
+// Polls hass.connection state every 2s. When it transitions to disconnected,
+// slides a CN-branded banner down from the top of the page; hides on reconnect.
+// Replaces HA's silent "Loading data" hang with explicit feedback so customers
+// know the hub is the problem (not their phone, not their app).
+function initHubOfflineBanner() {
+  if (document.querySelector('[data-cn-offline]')) return;
+
+  const banner = document.createElement('div');
+  banner.dataset.cnOffline = '1';
+  banner.style.cssText = [
+    'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:99999',
+    'background:linear-gradient(90deg,#d97706,#b45309)',
+    'color:#fff', 'text-align:center', 'padding:10px 16px',
+    'font-family:Raleway,sans-serif', 'font-size:14px', 'font-weight:500',
+    'box-shadow:0 2px 12px rgba(0,0,0,.4)',
+    'transform:translateY(-100%)', 'transition:transform .35s ease-out',
+    'pointer-events:auto',
+  ].join(';');
+  banner.innerHTML = `
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <span style="font-size:16px;">⚠</span>
+      <span>Connect Nest hub appears offline — trying to reconnect…</span>
+      <a href="https://wa.me/61492970809?text=Hi%20Connect%20Nest%2C%20my%20hub%20appears%20offline"
+         target="_blank" rel="noopener"
+         style="margin-left:8px;color:#fff;text-decoration:underline;font-weight:600;">
+        Get help
+      </a>
+    </span>
+  `;
+  document.body.appendChild(banner);
+
+  // hass.connection.connected is the canonical truth source. Fall back to
+  // hass.connected if the connection object isn't yet attached.
+  // We poll rather than subscribe to keep this self-contained — at 2s it's
+  // cheap and the false-negative window is tiny.
+  let lastState = true;
+  let consecutiveOffline = 0;
+  setInterval(() => {
+    const ha = document.querySelector('home-assistant');
+    if (!ha || !ha.hass) return;
+    const conn = ha.hass.connection;
+    const connected = conn ? conn.connected !== false : ha.hass.connected !== false;
+
+    if (!connected) {
+      consecutiveOffline++;
+    } else {
+      consecutiveOffline = 0;
+    }
+
+    // Require 2 consecutive offline polls (4s) before showing the banner.
+    // Avoids flashing during normal page transitions or brief auth refreshes.
+    const showBanner = consecutiveOffline >= 2;
+
+    if (showBanner !== !lastState) {
+      lastState = !showBanner;
+      banner.style.transform = showBanner ? 'translateY(0)' : 'translateY(-100%)';
+    }
+  }, 2000);
 }

@@ -48,8 +48,9 @@ RUN echo "==> [CN] Downloading card-mod v${CARD_MOD_VERSION}..." \
     ) \
  && echo "==> [CN] card-mod step done"
 
-# cn-bg.png is bundled in rootfs/ and copied by the COPY rootfs/ step above.
-RUN echo "==> [CN] Background image bundled in rootfs OK"
+# cn-bg.webp is bundled in rootfs/ and copied by the COPY rootfs/ step above
+# (66KB WebP, ~95% smaller than the original PNG with no perceptible quality loss).
+RUN echo "==> [CN] Background image (WebP) bundled in rootfs OK"
 
 # ── Bubble Card (premium pill-style buttons) ─────────────────
 # Pinned to a known-good release. Bump the version here when upgrading.
