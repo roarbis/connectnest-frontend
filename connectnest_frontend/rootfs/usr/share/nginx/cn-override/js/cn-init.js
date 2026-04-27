@@ -233,41 +233,34 @@ function initSidebarExtras() {
   function patchUserBadge(sidebar) {
     if (!sidebar || !sidebar.shadowRoot) return;
     const sRoot = sidebar.shadowRoot;
-    // ha-user-badge renders a coloured circle with initials
     const badge = sRoot.querySelector('ha-user-badge');
     if (!badge || badge.dataset.cnPatched) return;
     badge.dataset.cnPatched = '1';
 
-    // Override the inner shadow DOM to show CN icon instead
+    // Inject a style + img directly into ha-user-badge's shadow root.
+    // HA renders initials via :host CSS, so we overlay an absolutely-positioned
+    // image rather than trying to replace the inner text node.
     const patchBadge = () => {
       if (!badge.shadowRoot) return;
-      const circle = badge.shadowRoot.querySelector('.badge, span, div');
-      if (!circle) return;
-      circle.style.cssText = [
-        'background:transparent !important',
-        'border:2px solid #15C7B4',
-        'display:flex',
-        'align-items:center',
-        'justify-content:center',
-        'border-radius:50%',
-        'width:36px',
-        'height:36px',
-        'overflow:hidden',
-      ].join(';');
-      if (!circle.querySelector('img[data-cn-avatar]')) {
-        circle.innerHTML = '';
-        const img = document.createElement('img');
-        img.src = '/static/icons/cn-icon-96.png';
-        img.dataset.cnAvatar = '1';
-        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
-        circle.appendChild(img);
-      }
+      if (badge.shadowRoot.querySelector('img[data-cn-avatar]')) return;
+      const style = document.createElement('style');
+      style.textContent = `
+        :host { position:relative; border:2px solid #15C7B4 !important; box-sizing:border-box; }
+        img[data-cn-avatar] {
+          position:absolute; inset:0; width:100%; height:100%;
+          object-fit:cover; border-radius:50%; z-index:1;
+        }
+      `;
+      const img = document.createElement('img');
+      img.src = '/static/icons/cn-icon-96.png';
+      img.dataset.cnAvatar = '1';
+      badge.shadowRoot.appendChild(style);
+      badge.shadowRoot.appendChild(img);
     };
 
     patchBadge();
-    // Re-attempt if shadow root wasn't ready yet
     if (badge.shadowRoot) {
-      new MutationObserver(patchBadge).observe(badge.shadowRoot, { childList: true, subtree: true });
+      new MutationObserver(patchBadge).observe(badge.shadowRoot, { childList: true });
     }
   }
 
