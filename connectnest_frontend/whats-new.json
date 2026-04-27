@@ -1,6 +1,16 @@
 {
-  "current": "2025.4.5",
+  "current": "2025.4.6",
   "releases": [
+    {
+      "version": "2025.4.6",
+      "date": "2026-04-27",
+      "title": "Stability fix — no more loading freeze",
+      "highlights": [
+        "Fixed browser freeze on port 7080 — 'Loading data' hang is resolved",
+        "Branding now waits for Connect Nest to fully load before activating",
+        "Fixed hide-leaks observer walking entire DOM on every update"
+      ]
+    },
     {
       "version": "2025.4.5",
       "date": "2026-04-27",

@@ -10,6 +10,20 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.6] — 2026-04-27
+
+### Fixed
+- **Browser freeze / "Loading data" hang on port 7080** — `cn-init.js` was running
+  all MutationObservers immediately when HA loaded its extra modules, blocking
+  HA's WebSocket authentication loop. All heavy observers now wait until
+  `home-assistant.hass` exists (HA fully authenticated) before starting.
+  Login page logo still injects immediately as it is needed pre-auth.
+- **`cn-hide-leaks.js` O(n) observer** — was calling `walkShadowRoots(document.documentElement)`
+  on every DOM mutation, re-traversing the entire document tree. Now processes
+  only newly added nodes, matching the pattern used in `cn-scrubber.js`.
+
+---
+
 ## [2025.4.5] — 2026-04-27
 
 ### Added
