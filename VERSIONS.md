@@ -9,6 +9,7 @@ Quick-reference table for rollbacks. Each row is a tagged release you can restor
 
 | Version | Git Tag | Date | Milestone | What's in it | Revert to this if… |
 |---------|---------|------|-----------|--------------|---------------------|
+| **2025.4.7+** | `layer-a-complete` | 2026-04-27 | **Layer A complete** — sealed milestone | v2025.4.7 + refreshed wallpaper asset + TEST-GUIDE.md for partner testing. Last known-good before Layer B (Bubble Card). Restore here if Layer B work needs to be reverted. | You broke something in Layer B and want to come back to a clean glass-theme baseline |
 | **2025.4.7** | `v2025.4.7` | 2026-04-27 | Layer A — glass theme + iOS polish | All 2025.4.6 + new `cn_glass` theme (visionOS-style auto light/dark glassmorphism); strips HA Companion install banner from iPhone Safari; hides OHF badge on splash | You want themes + iOS polish without bundled cards |
 | **2025.4.6** | `v2025.4.6` | 2026-04-27 | **MVP** — Stable, no freeze | All 2025.4.5 features + browser freeze fixed: branding observers now wait for HA to finish loading before activating; hide-leaks observer no longer re-walks full DOM on every mutation | Last proven-stable base before glass theme |
 | **2025.4.5** | `v2025.4.5` | 2026-04-27 | Feature-complete but freezes | CN branding on port 7080, dark + light themes, sidebar logo, login logo, "About Connect Nest" panel, sidebar quick-links, user avatar override, branded toasts, custom 404, wallpaper, add-on store icon | You want features without the freeze fix (not recommended) |
