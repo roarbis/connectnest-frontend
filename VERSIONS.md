@@ -23,6 +23,7 @@ Quick-reference table for rollbacks. Each row is a tagged release you can restor
 | Version | Milestone | Planned changes |
 |---------|-----------|-----------------|
 | **2025.4.7** | Mushroom cards | Bundle mushroom.js, CN-branded CSS variables (teal accents, rounded shapes, hover effects), register via extra_module_url |
+| **2025.4.x** | Cosmetic polish (deferred) | Top-of-sidebar CN logo (HA 2026.4 shadow DOM changed `.menu` selector) and `ha-user-badge` avatar overlay — both deferred, not blocking MVP |
 | **2025.4.8** | Favicon + PWA icon | nginx intercepts /favicon.ico and /manifest.json, serves CN icon — awaiting user confirmation on icon files |
 | **2025.4.9** | Sidebar customisation | Hide Map / Energy / History from customer view, reorder items, rename labels |
 | **2025.5.x** | Dual-port customer/admin split | Port 7080 = clean customer view (no admin panels), port 7081 = full admin access |
