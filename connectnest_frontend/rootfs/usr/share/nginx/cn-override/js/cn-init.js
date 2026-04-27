@@ -214,10 +214,31 @@ function initSidebarExtras() {
     return a;
   }
 
+  function injectTopLogo(sRoot) {
+    if (sRoot.querySelector('[data-cn-top-logo]')) return;
+    const menu = sRoot.querySelector('.menu');
+    if (!menu) return;
+    // Hide HA's default title text — we replace it with icon + label
+    const title = menu.querySelector('.title');
+    if (title) title.style.cssText = 'display:none!important';
+    const wrap = document.createElement('div');
+    wrap.dataset.cnTopLogo = '1';
+    wrap.style.cssText = 'display:flex;align-items:center;gap:8px;padding:0 6px;flex:1;min-width:0;';
+    wrap.innerHTML = `
+      <img src="/static/icons/cn-icon-96.png"
+           style="width:32px;height:32px;border-radius:8px;flex-shrink:0;" alt="">
+      <span style="font-family:baumans,sans-serif;font-size:20px;color:#15C7B4;
+                   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Connect Nest</span>
+    `;
+    menu.appendChild(wrap);
+  }
+
   function injectLinks(sidebar) {
     if (!sidebar || !sidebar.shadowRoot) return;
     const sRoot = sidebar.shadowRoot;
     if (sRoot.querySelector('[data-cn-link]')) return; // already injected
+
+    injectTopLogo(sRoot);
 
     // Insert before the divider / bottom section
     const scrollDiv = sRoot.querySelector('.scroll') || sRoot.querySelector('paper-listbox') || sRoot.querySelector('ul');
