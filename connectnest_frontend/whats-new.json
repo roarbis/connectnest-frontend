@@ -1,6 +1,17 @@
 {
-  "current": "2025.4.6",
+  "current": "2025.4.7",
   "releases": [
+    {
+      "version": "2025.4.7",
+      "date": "2026-04-27",
+      "title": "Glass theme + branding polish",
+      "highlights": [
+        "New cn_glass theme — visionOS-inspired glassmorphic look with auto light/dark mode",
+        "Removed Home Assistant Companion install banner from iPhone Safari",
+        "Hidden Open Home Foundation badge from the launch splash screen",
+        "Cards now feel premium with translucent surfaces and subtle blur"
+      ]
+    },
     {
       "version": "2025.4.6",
       "date": "2026-04-27",

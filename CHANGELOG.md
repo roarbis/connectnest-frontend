@@ -10,6 +10,23 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.7] — 2026-04-27
+
+### Added
+- **`cn_glass` theme** — visionOS-inspired glassmorphic theme with auto
+  light/dark mode switching. Translucent cards with `blur(20px) saturate(160%)`
+  over the bundled wallpaper, glass-edge inset shadows, and CN teal accents.
+  Available alongside `cn_dark` and `cn_light` via the add-on options dropdown.
+- `.ohf-logo` selector added to `cn-hide-leaks.js` so the Open Home Foundation
+  badge no longer flashes on the launch splash.
+
+### Fixed
+- **Apple Smart App Banner** — `<meta name="apple-itunes-app" content="app-id=1099568401">`
+  was leaking through and prompting iPhone Safari users to install the Home
+  Assistant Companion app. Stripped via nginx `sub_filter` on both server blocks.
+
+---
+
 ## [2025.4.6] — 2026-04-27
 
 ### Fixed

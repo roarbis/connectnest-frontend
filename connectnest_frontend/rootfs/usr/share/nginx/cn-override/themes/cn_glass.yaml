@@ -1,0 +1,162 @@
+# ============================================================
+#  Connect Nest — Glass theme
+#
+#  Glassmorphic theme inspired by Apple visionOS / iOS Liquid Glass.
+#  Translucent cards with blur over a fixed wallpaper background.
+#  Auto-switches between light and dark modes based on the OS.
+#
+#  Tested with HA Core 2026.4 — relies on `modes:` syntax and
+#  ha-card-backdrop-filter (HA 2024.1+).
+# ============================================================
+
+cn_glass:
+  # Card-mod sidebar branding (top logo + colours)
+  # Note: card-mod is registered via extra_module_url, not Lovelace API.
+  card-mod-theme: cn_glass
+
+  # ─── Global wallpaper ────────────────────────────────────
+  # Bundled inside the add-on — served by nginx at /cn-bg.png
+  background-image: "center / cover no-repeat fixed url('/cn-bg.png')"
+  lovelace-background: "var(--background-image)"
+
+  # ─── Fonts ───────────────────────────────────────────────
+  primary-font-family: "Raleway, sans-serif"
+  paper-font-common-base_-_font-family: "var(--primary-font-family)"
+  paper-font-common-code_-_font-family: "var(--primary-font-family)"
+  paper-font-body1_-_font-family: "var(--primary-font-family)"
+  paper-font-subhead_-_font-family: "var(--primary-font-family)"
+  paper-font-headline_-_font-family: "var(--primary-font-family)"
+  paper-font-caption_-_font-family: "var(--primary-font-family)"
+  paper-font-title_-_font-family: "var(--primary-font-family)"
+  ha-card-header-font-family: "var(--primary-font-family)"
+
+  # ─── The glass effect (shared light/dark) ────────────────
+  # 20px blur is the visionOS sweet spot — enough to obscure
+  # detail behind cards while still hinting at the wallpaper.
+  ha-card-backdrop-filter: "blur(20px) saturate(160%)"
+  ha-card-border-radius: "22px"
+  ha-card-border-width: "0px"
+
+  # Inset shadows create the "glass edge" highlight.
+  # Top-left bright, bottom-right dim — mimics light from above.
+  ha-card-box-shadow: >-
+    0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.40) inset,
+    -0.5px -0.5px 1px 0px rgba(255, 255, 255, 0.10) inset,
+    0px 1px 2px 0px rgba(0, 0, 0, 0.20)
+
+  # Backdrops on dialogs and headers also get the blur
+  ha-dialog-surface-backdrop-filter: "var(--ha-card-backdrop-filter)"
+  app-header-backdrop-filter: "var(--ha-card-backdrop-filter)"
+  app-header-background-color: "rgba(60, 139, 140, 0.55)"
+
+  # ─── Connect Nest accent (always teal) ───────────────────
+  accent-color: "#15C7B4"
+  primary-color: "var(--accent-color)"
+  light-primary-color: "var(--accent-color)"
+  paper-item-icon-active-color: "var(--accent-color)"
+  sidebar-selected-icon-color: "var(--accent-color)"
+  mdc-theme-primary: "var(--accent-color)"
+
+  # ─── Toggles, sliders, switches ──────────────────────────
+  paper-toggle-button-checked-bar-color: "var(--accent-color)"
+  paper-slider-knob-color: "var(--accent-color)"
+  paper-slider-active-color: "var(--accent-color)"
+  switch-checked-button-color: "var(--accent-color)"
+  paper-radio-button-checked-color: "var(--accent-color)"
+  paper-input-container-focus-color: "var(--accent-color)"
+  codemirror-property: "var(--accent-color)"
+
+  # ─── Light/dark mode auto-switch ─────────────────────────
+  # HA reads OS preference and applies the matching block.
+  # User can override via Profile → Theme dropdown.
+  modes:
+
+    # ────────────────────────────────────────────────────
+    #  DARK MODE — translucent black cards over wallpaper
+    # ────────────────────────────────────────────────────
+    dark:
+      # Backgrounds — mostly transparent so wallpaper shows through
+      primary-background-color: "rgba(20, 22, 26, 0.0)"
+      secondary-background-color: "rgba(20, 22, 26, 0.0)"
+      background-color: "rgba(20, 22, 26, 0.0)"
+      card-background-color: "rgba(28, 32, 38, 0.55)"
+      ha-card-background: "rgba(28, 32, 38, 0.55)"
+
+      # Text — high contrast white on the blur
+      text-color: "#ffffff"
+      primary-text-color: "var(--text-color)"
+      text-primary-color: "var(--text-color)"
+      secondary-text-color: "rgba(255, 255, 255, 0.72)"
+      disabled-text-color: "rgba(255, 255, 255, 0.36)"
+
+      # Sidebar — translucent dark slab
+      sidebar-background-color: "rgba(28, 32, 38, 0.65)"
+      paper-listbox-background-color: "var(--sidebar-background-color)"
+      sidebar-icon-color: "rgba(255, 255, 255, 0.72)"
+      sidebar-selected-text-color: "#ffffff"
+      sidebar-text-color: "rgba(255, 255, 255, 0.85)"
+
+      # Inputs / dropdowns — match the glass look
+      mdc-text-field-fill-color: "rgba(255, 255, 255, 0.08)"
+      mdc-text-field-ink-color: "var(--text-color)"
+      mdc-select-fill-color: "rgba(255, 255, 255, 0.08)"
+      input-fill-color: "rgba(255, 255, 255, 0.08)"
+      input-ink-color: "var(--text-color)"
+      input-label-ink-color: "var(--secondary-text-color)"
+      input-idle-line-color: "rgba(255, 255, 255, 0.18)"
+      input-hover-line-color: "var(--accent-color)"
+      input-dropdown-icon-color: "var(--secondary-text-color)"
+
+      # Borders & dividers
+      divider-color: "rgba(255, 255, 255, 0.10)"
+      border-color: "rgba(255, 255, 255, 0.18)"
+
+      # Badges (status)
+      label-badge-background-color: "rgba(28, 32, 38, 0.55)"
+      label-badge-text-color: "var(--text-primary-color)"
+      label-badge-red: "rgba(220, 80, 90, 0.85)"
+      label-badge-blue: "rgba(40, 140, 240, 0.85)"
+      label-badge-green: "rgba(0, 202, 139, 0.85)"
+      label-badge-yellow: "rgba(222, 176, 107, 0.85)"
+
+    # ────────────────────────────────────────────────────
+    #  LIGHT MODE — translucent white cards over wallpaper
+    # ────────────────────────────────────────────────────
+    light:
+      primary-background-color: "rgba(245, 245, 247, 0.0)"
+      secondary-background-color: "rgba(245, 245, 247, 0.0)"
+      background-color: "rgba(245, 245, 247, 0.0)"
+      card-background-color: "rgba(255, 255, 255, 0.55)"
+      ha-card-background: "rgba(255, 255, 255, 0.55)"
+
+      text-color: "#0c1a1c"
+      primary-text-color: "var(--text-color)"
+      text-primary-color: "var(--text-color)"
+      secondary-text-color: "rgba(12, 26, 28, 0.66)"
+      disabled-text-color: "rgba(12, 26, 28, 0.36)"
+
+      sidebar-background-color: "rgba(255, 255, 255, 0.65)"
+      paper-listbox-background-color: "var(--sidebar-background-color)"
+      sidebar-icon-color: "rgba(12, 26, 28, 0.72)"
+      sidebar-selected-text-color: "#0c1a1c"
+      sidebar-text-color: "rgba(12, 26, 28, 0.85)"
+
+      mdc-text-field-fill-color: "rgba(12, 26, 28, 0.05)"
+      mdc-text-field-ink-color: "var(--text-color)"
+      mdc-select-fill-color: "rgba(12, 26, 28, 0.05)"
+      input-fill-color: "rgba(12, 26, 28, 0.05)"
+      input-ink-color: "var(--text-color)"
+      input-label-ink-color: "var(--secondary-text-color)"
+      input-idle-line-color: "rgba(12, 26, 28, 0.18)"
+      input-hover-line-color: "var(--accent-color)"
+      input-dropdown-icon-color: "var(--secondary-text-color)"
+
+      divider-color: "rgba(12, 26, 28, 0.10)"
+      border-color: "rgba(12, 26, 28, 0.18)"
+
+      label-badge-background-color: "rgba(255, 255, 255, 0.55)"
+      label-badge-text-color: "var(--text-primary-color)"
+      label-badge-red: "rgba(220, 80, 90, 0.85)"
+      label-badge-blue: "rgba(40, 140, 240, 0.85)"
+      label-badge-green: "rgba(0, 202, 139, 0.85)"
+      label-badge-yellow: "rgba(222, 176, 107, 0.85)"

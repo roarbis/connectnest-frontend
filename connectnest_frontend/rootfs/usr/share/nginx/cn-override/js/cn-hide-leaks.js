@@ -10,6 +10,8 @@ const HIDE_SELECTORS = [
   'a[href*="home-assistant.io"]',
   // Generic "Powered by Home Assistant" footer text nodes
   '.powered-by',
+  // Open Home Foundation badge on launch / splash screen
+  '.ohf-logo',
 ];
 
 const OVERRIDE_LINKS = [

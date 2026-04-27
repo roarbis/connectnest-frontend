@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.6"
+ADDON_VERSION="2025.4.7"
 INGRESS_PORT=8099
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -170,6 +170,8 @@ http {
             sub_filter_once off;
             sub_filter 'Home Assistant' 'Connect Nest';
             sub_filter 'home-assistant' 'connect-nest';
+            # Strip Apple Smart App Banner that pushes the HA Companion app
+            sub_filter '<meta name="apple-itunes-app" content="app-id=1099568401">' '';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
             # text/html is sub_filter's default — listing it explicitly causes a warning
             sub_filter_types text/javascript application/javascript application/json;
@@ -236,6 +238,8 @@ http {
             sub_filter_once off;
             sub_filter 'Home Assistant' 'Connect Nest';
             sub_filter 'home-assistant' 'connect-nest';
+            # Strip Apple Smart App Banner that pushes the HA Companion app
+            sub_filter '<meta name="apple-itunes-app" content="app-id=1099568401">' '';
             sub_filter '</head>' '<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/cn-icon-180.png"><link rel="apple-touch-icon" sizes="152x152" href="/static/icons/cn-icon-152.png"><link rel="apple-touch-icon" sizes="120x120" href="/static/icons/cn-icon-120.png"><meta name="apple-mobile-web-app-title" content="Connect Nest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap"></head>';
             sub_filter_types text/javascript application/javascript application/json;
 
@@ -268,7 +272,8 @@ MARKER=/config/.cn_frontend_setup_done
 mkdir -p /config/themes
 cp ${OVERRIDE_DIR}/themes/cn_dark.yaml  /config/themes/cn_dark.yaml
 cp ${OVERRIDE_DIR}/themes/cn_light.yaml /config/themes/cn_light.yaml
-success "Themes installed: cn_dark + cn_light"
+cp ${OVERRIDE_DIR}/themes/cn_glass.yaml /config/themes/cn_glass.yaml
+success "Themes installed: cn_dark + cn_light + cn_glass"
 
 # Always copy panel JS + branding JS to HA's /local/ folder
 # (they're versioned by content, so refresh is cheap)
