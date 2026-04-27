@@ -3,20 +3,32 @@ import { initScrubber }   from '/local/cn-scrubber.js';
 import { initHideLeaks }  from '/local/cn-hide-leaks.js';
 
 (function cnInit() {
-  const run = () => {
+  // Login logo runs immediately — needed before the user authenticates
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectLoginLogo, { once: true });
+  } else {
+    injectLoginLogo();
+  }
+
+  // All heavy observers wait until HA is authenticated and the hass object exists.
+  // Running them during HA's WebSocket startup blocks the auth loop → "Loading data" freeze.
+  function waitForHass(cb, elapsed) {
+    elapsed = elapsed || 0;
+    const ha = document.querySelector('home-assistant');
+    if (ha && ha.hass) {
+      cb();
+    } else if (elapsed < 30000) {
+      setTimeout(() => waitForHass(cb, elapsed + 250), 250);
+    }
+  }
+
+  waitForHass(() => {
     initScrubber();
     initHideLeaks();
-    injectLoginLogo();
     initToastBranding();    // item 6 — branded notifications
     initNotFoundGuard();    // item 7 — custom 404 screen
     initSidebarExtras();    // quick-links + user avatar
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run, { once: true });
-  } else {
-    run();
-  }
+  });
 })();
 
 // ─── Login page logo ───────────────────────────────────────────────────────

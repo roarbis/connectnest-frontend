@@ -51,8 +51,17 @@ function walkShadowRoots(root) {
 export function initHideLeaks() {
   walkShadowRoots(document.documentElement);
 
-  const observer = new MutationObserver(() => {
-    walkShadowRoots(document.documentElement);
+  // Process only newly added nodes — re-walking the full tree on every mutation
+  // is O(n) per mutation and causes the browser to freeze during HA's load.
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      for (const node of m.addedNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          applyHides(node);
+          if (node.shadowRoot) walkShadowRoots(node.shadowRoot);
+        }
+      }
+    }
   });
 
   observer.observe(document.documentElement, {
