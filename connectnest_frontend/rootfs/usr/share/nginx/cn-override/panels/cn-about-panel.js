@@ -2,7 +2,9 @@
 // Registered as panel_custom (name: cn-about) in configuration.yaml.
 // Displays branding, What's New, System Health, and contact info.
 
-const VERSION = '2025.4.5';
+// Version label shown in the panel hero + footer. Kept in sync with the
+// add-on release tag — bump alongside config.yaml / run.sh / whats-new.json.
+const VERSION = '2025.4.12';
 
 const STYLES = `
   :host {
@@ -19,6 +21,32 @@ const STYLES = `
     margin: 0 auto;
     padding: 2rem 1.25rem 4rem;
   }
+
+  /* ── Top bar with back button (matches HA's other panel pages) ── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .back-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--primary-text-color, #fff);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.18s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .back-btn:hover { background: rgba(127, 127, 127, 0.14); }
+  .back-btn:active { background: rgba(127, 127, 127, 0.22); }
+  .back-btn svg { width: 24px; height: 24px; display: block; }
 
   /* ── Hero ── */
   .hero {
@@ -219,8 +247,24 @@ class CnAboutPanel extends HTMLElement {
     if (this.shadowRoot) return;
     this.attachShadow({ mode: 'open' });
     this._render();
+    this._wireBackButton();
     this._loadWhatsNew();
     this._checkHealth();
+  }
+
+  _wireBackButton() {
+    const btn = this.shadowRoot.getElementById('cn-back-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      // Prefer browser history when available — matches how HA's own panel
+      // back buttons behave. Fall back to the default dashboard if this is
+      // the first page in the session (e.g. user opened cn-about directly).
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = '/';
+      }
+    });
   }
 
   set hass(hass) {
@@ -240,6 +284,14 @@ class CnAboutPanel extends HTMLElement {
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Baumans&display=swap">
       <style>${STYLES}</style>
       <div class="page">
+
+        <div class="topbar">
+          <button class="back-btn" id="cn-back-btn" aria-label="Back" title="Back">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+          </button>
+        </div>
 
         <div class="hero">
           <img src="/static/icons/cn-icon-192.png" alt="Connect Nest">

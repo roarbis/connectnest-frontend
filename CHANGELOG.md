@@ -10,6 +10,22 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.12] — 2026-04-28
+
+### Added
+- **Back button on the About Connect Nest panel** — small circular icon-only
+  button at the top-left, matching the look of HA's other panel pages.
+  Calls `history.back()` when there is browser history; falls back to `/`
+  otherwise (covers the case where a user opened the panel via direct URL).
+
+### Fixed
+- **Stale version label on About panel** — the hardcoded `VERSION` constant
+  was still showing `v2025.4.5` even though the add-on had moved to
+  `2025.4.11`. Now in sync. Comment added next to the constant reminding
+  future-us to bump it alongside `config.yaml` / `run.sh` / `whats-new.json`.
+
+---
+
 ## [2025.4.11] — 2026-04-28
 
 ### Added

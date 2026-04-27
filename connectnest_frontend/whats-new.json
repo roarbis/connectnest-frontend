@@ -1,6 +1,15 @@
 {
-  "current": "2025.4.11",
+  "current": "2025.4.12",
   "releases": [
+    {
+      "version": "2025.4.12",
+      "date": "2026-04-28",
+      "title": "Back button on About panel",
+      "highlights": [
+        "Added a back button to the About Connect Nest page so it's easier to return where you came from",
+        "About panel now shows the correct current version (was stuck on an older number)"
+      ]
+    },
     {
       "version": "2025.4.11",
       "date": "2026-04-28",

@@ -12,7 +12,7 @@
 # ============================================================
 
 name: "Connect Nest FrontEnd"
-version: "2025.4.11"
+version: "2025.4.12"
 slug: "connectnest_frontend"
 description: "Seamless Technology, Simplified Living. The Connect Nest interface for your smart home hub."
 url: "https://github.com/roarbis/connectnest-frontend"

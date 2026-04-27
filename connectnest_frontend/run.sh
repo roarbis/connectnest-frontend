@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.11"
+ADDON_VERSION="2025.4.12"
 INGRESS_PORT=8919
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override

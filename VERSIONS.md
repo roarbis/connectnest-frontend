@@ -9,6 +9,7 @@ Quick-reference table for rollbacks. Each row is a tagged release you can restor
 
 | Version | Git Tag | Date | Milestone | What's in it | Revert to this if… |
 |---------|---------|------|-----------|--------------|---------------------|
+| **2025.4.12** | `v2025.4.12` | 2026-04-28 | About panel back button + version sync | Adds back-arrow on About Connect Nest panel matching HA's other panels (`history.back()` with `/` fallback). Fixes stale `VERSION` constant that was stuck on `2025.4.5` while add-on moved on. | Customers complain About panel has no way out, or the version label there is wrong |
 | **2025.4.11** | `v2025.4.11` | 2026-04-28 | Customer-install polish (top 5) | CN favicon (browser tabs); wallpaper PNG → WebP (1.4 MB → 66 KB); "Forgot password?" support link on login; hub-offline banner with help button. TODO.md created with remaining 14 ideas | You want better customer-day-one polish |
 | **2025.4.10** | `v2025.4.10` | 2026-04-28 | Hotfix — readable dropdowns | All three themes now comprehensively override the Material Web variables HA 2026.4 uses for filled text fields and selects. Fixes white-on-light text in Profile / Settings / dialogs. | Dropdown text is illegible after upgrade |
 | **2025.4.9** | `v2025.4.9` | 2026-04-27 | Hotfix — ingress port collision | Internal ingress port `8099 → 8919` to fix `bind() failed (address in use)` errors on fresh installs where another add-on already held 8099 | A new install fails with "Address in use" or partner's install errors |
