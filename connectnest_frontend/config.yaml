@@ -12,7 +12,7 @@
 # ============================================================
 
 name: "Connect Nest FrontEnd"
-version: "2025.4.8"
+version: "2025.4.9"
 slug: "connectnest_frontend"
 description: "Seamless Technology, Simplified Living. The Connect Nest interface for your smart home hub."
 url: "https://github.com/roarbis/connectnest-frontend"
@@ -57,7 +57,9 @@ host_network: true
 
 # Embed in HA sidebar as "Connect Nest" (in addition to direct port access)
 ingress: true
-ingress_port: 8099
+# 8919 chosen to avoid collisions — 8099 is HA Supervisor's default ingress
+# port and frequently grabbed by other add-ons when host_network is true.
+ingress_port: 8919
 panel_icon: "mdi:home-lightning-bolt-outline"
 panel_title: "Connect Nest"
 panel_admin: false
@@ -78,7 +80,7 @@ hassio_role: "manager"      # Required for Lovelace resources API
 homeassistant_api: true     # Future: read backup status for System Health widget
 
 # Watchdog — auto-restart if the ingress endpoint goes down
-watchdog: "http://[HOST]:8099/"
+watchdog: "http://[HOST]:8919/"
 
 # image: "ghcr.io/roarbis/connectnest-frontend-{arch}"
 # ^ Uncomment post-V1 when pre-built ghcr.io images are published (Path B).

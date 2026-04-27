@@ -1,6 +1,15 @@
 {
-  "current": "2025.4.8",
+  "current": "2025.4.9",
   "releases": [
+    {
+      "version": "2025.4.9",
+      "date": "2026-04-27",
+      "title": "Install fix — port conflict resolved",
+      "highlights": [
+        "Fixed 'address in use' error preventing fresh installs on hubs that already had another add-on on port 8099",
+        "Internal ingress port moved to 8919 — no impact on user-facing port 7080"
+      ]
+    },
     {
       "version": "2025.4.8",
       "date": "2026-04-27",

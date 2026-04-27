@@ -9,6 +9,7 @@ Quick-reference table for rollbacks. Each row is a tagged release you can restor
 
 | Version | Git Tag | Date | Milestone | What's in it | Revert to this if… |
 |---------|---------|------|-----------|--------------|---------------------|
+| **2025.4.9** | `v2025.4.9` | 2026-04-27 | Hotfix — ingress port collision | Internal ingress port `8099 → 8919` to fix `bind() failed (address in use)` errors on fresh installs where another add-on already held 8099 | A new install fails with "Address in use" or partner's install errors |
 | **2025.4.8** | `v2025.4.8` | 2026-04-27 | Layer B — Bubble Card bundle | Pinned Bubble Card v3.1.6 inside Docker image; HACS-aware deploy to `/config/www/cn-cards/`; `--bubble-*` CSS vars in all 3 themes auto-inherit CN teal; wallpaper cache 30d→1d; existing installs get log warning with manual `extra_module_url` line | You want themes + bundled card library |
 | **2025.4.7+** | `layer-a-complete` | 2026-04-27 | **Layer A complete** — sealed milestone | v2025.4.7 + refreshed wallpaper asset + TEST-GUIDE.md for partner testing. Last known-good before Layer B (Bubble Card). Restore here if Layer B work needs to be reverted. | You broke something in Layer B and want to come back to a clean glass-theme baseline |
 | **2025.4.7** | `v2025.4.7` | 2026-04-27 | Layer A — glass theme + iOS polish | All 2025.4.6 + new `cn_glass` theme (visionOS-style auto light/dark glassmorphism); strips HA Companion install banner from iPhone Safari; hides OHF badge on splash | You want themes + iOS polish without bundled cards |
@@ -26,9 +27,9 @@ Quick-reference table for rollbacks. Each row is a tagged release you can restor
 | Version | Milestone | Planned changes |
 |---------|-----------|-----------------|
 | **2025.4.x** | Cosmetic polish (deferred) | Top-of-sidebar CN logo (HA 2026.4 shadow DOM changed `.menu` selector) and `ha-user-badge` avatar overlay — both deferred, not blocking MVP |
-| **2025.4.9** | Favicon + PWA icon | nginx intercepts /favicon.ico and /manifest.json, serves CN icon — awaiting user confirmation on icon files |
-| **2025.4.10** | Sidebar customisation | Hide Map / Energy / History from customer view, reorder items, rename labels |
-| **2025.4.11** | Layer C — sample dashboard | Pre-built Connect Nest Lovelace YAML using bundled Bubble Card; opt-in via "Load Connect Nest sample dashboard" button on the About panel |
+| **2025.4.10** | Favicon + PWA icon | nginx intercepts /favicon.ico and /manifest.json, serves CN icon — awaiting user confirmation on icon files |
+| **2025.4.11** | Sidebar customisation | Hide Map / Energy / History from customer view, reorder items, rename labels |
+| **2025.4.12** | Layer C — sample dashboard | Pre-built Connect Nest Lovelace YAML using bundled Bubble Card; opt-in via "Load Connect Nest sample dashboard" button on the About panel |
 | **2025.5.x** | Dual-port customer/admin split | Port 7080 = clean customer view (no admin panels), port 7081 = full admin access |
 | **2025.6.x** | Mushroom (alternative card) | Optional second bundled card library for users who prefer Mushroom over Bubble |
 

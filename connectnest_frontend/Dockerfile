@@ -74,6 +74,6 @@ RUN echo "==> [CN] Downloading Bubble Card ${BUBBLE_CARD_VERSION}..." \
 
 # ── Healthcheck ───────────────────────────────────────────────
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -fsS http://127.0.0.1:8099/ > /dev/null || exit 1
+    CMD curl -fsS http://127.0.0.1:8919/ > /dev/null || exit 1
 
 CMD ["/run.sh"]

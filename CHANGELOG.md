@@ -10,6 +10,18 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.9] — 2026-04-27
+
+### Fixed
+- **Ingress port collision (`bind() to 0.0.0.0:8099 failed`)** — moved the
+  internal nginx ingress port from `8099` to `8919`. With `host_network: true`
+  the chosen port must be unique on the host; `8099` is HA Supervisor's
+  default ingress port and frequently already in use by other add-ons.
+  Updated `config.yaml`, `run.sh`, the Dockerfile healthcheck, and the
+  watchdog URL in lockstep.
+
+---
+
 ## [2025.4.8] — 2026-04-27
 
 ### Added
