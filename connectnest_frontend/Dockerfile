@@ -51,6 +51,27 @@ RUN echo "==> [CN] Downloading card-mod v${CARD_MOD_VERSION}..." \
 # cn-bg.png is bundled in rootfs/ and copied by the COPY rootfs/ step above.
 RUN echo "==> [CN] Background image bundled in rootfs OK"
 
+# ── Bubble Card (premium pill-style buttons) ─────────────────
+# Pinned to a known-good release. Bump the version here when upgrading.
+# Falls back gracefully if GitHub is unreachable at build time.
+# Files end up in /usr/share/nginx/cn-override/cards/ — run.sh decides at
+# runtime whether to deploy them (skipped if a HACS copy already exists).
+ARG BUBBLE_CARD_VERSION=v3.1.6
+RUN echo "==> [CN] Downloading Bubble Card ${BUBBLE_CARD_VERSION}..." \
+ && mkdir -p /usr/share/nginx/cn-override/cards \
+ && ( curl -fsSL -o /usr/share/nginx/cn-override/cards/bubble-card.js \
+          "https://raw.githubusercontent.com/Clooos/Bubble-Card/${BUBBLE_CARD_VERSION}/dist/bubble-card.js" \
+      || curl -fsSL -o /usr/share/nginx/cn-override/cards/bubble-card.js \
+          "https://github.com/Clooos/Bubble-Card/raw/${BUBBLE_CARD_VERSION}/dist/bubble-card.js" \
+      || { echo "==> [CN] WARN: Bubble Card download failed — bundled card library will not be available"; \
+           echo "// Bubble Card unavailable at build time" > /usr/share/nginx/cn-override/cards/bubble-card.js; } \
+    ) \
+ && ( curl -fsSL -o /usr/share/nginx/cn-override/cards/bubble-pop-up-fix.js \
+          "https://raw.githubusercontent.com/Clooos/Bubble-Card/${BUBBLE_CARD_VERSION}/dist/bubble-pop-up-fix.js" \
+      || echo "// Bubble pop-up fix unavailable at build time" > /usr/share/nginx/cn-override/cards/bubble-pop-up-fix.js \
+    ) \
+ && echo "==> [CN] Bubble Card step done"
+
 # ── Healthcheck ───────────────────────────────────────────────
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -fsS http://127.0.0.1:8099/ > /dev/null || exit 1

@@ -10,6 +10,36 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.8] — 2026-04-27
+
+### Added
+- **Bubble Card v3.1.6 bundled** — premium iOS Control Center–style pill button
+  card library. Downloaded into the Docker image at build time (pinned, no
+  runtime fetch), deployed to `/config/www/cn-cards/bubble-card.js` plus the
+  `bubble-pop-up-fix.js`.
+- **HACS-aware deploy** — `run.sh` now detects existing Bubble Card installs
+  under `/config/www/community/Bubble-Card/` and skips the bundled copy to
+  prevent duplicate custom-element registration.
+- **Bubble CSS variables in all themes** — `cn_glass`, `cn_dark`, `cn_light`
+  set `--bubble-accent-color`, `--bubble-border-radius`,
+  `--bubble-main-background-color` and friends via `var()` references, so any
+  `custom:bubble-card` automatically inherits CN teal accents and the active
+  theme's surface colour without per-card YAML.
+
+### Changed
+- **Wallpaper cache reduced from 30d to 1d** — `cn-bg.png` now refreshes within
+  24 hours of an add-on update instead of forcing a hard browser refresh.
+- **First-run `configuration.yaml` template** now lists
+  `/local/cn-cards/bubble-card.js` under `extra_module_url`. Existing
+  installations get a clear log warning with the exact line to add.
+
+### Notes
+- Bubble Card is **opt-in** — your existing dashboards keep working untouched.
+  To use it, add `type: custom:bubble-card` to a card and pick a sub-type from
+  https://github.com/Clooos/Bubble-Card.
+
+---
+
 ## [2025.4.7] — 2026-04-27
 
 ### Added

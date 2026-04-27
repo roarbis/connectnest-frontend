@@ -135,3 +135,12 @@ cn_light:
   # Mini Mediaplayer
   mini-media-player-base-color: "var(--text-color)"
   mini-media-player-accent-color: "var(--accent-color)"
+  # Bubble Card — inherits CN palette so any custom:bubble-card looks branded
+  bubble-accent-color: "var(--accent-color)"
+  bubble-border-radius: "var(--ha-card-border-radius)"
+  bubble-main-background-color: "var(--ha-card-background)"
+  bubble-secondary-background-color: "var(--background-color-2)"
+  bubble-button-background-color: "var(--ha-card-background)"
+  bubble-icon-background-color: "rgba(21, 199, 180, 0.15)"
+  bubble-main-text-color: "var(--primary-text-color)"
+  bubble-secondary-text-color: "var(--secondary-text-color)"

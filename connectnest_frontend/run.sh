@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.7"
+ADDON_VERSION="2025.4.8"
 INGRESS_PORT=8099
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -125,8 +125,8 @@ http {
         # CN background image
         location = /cn-bg.png {
             alias ${OVERRIDE_DIR}/static/cn-bg.png;
-            expires 30d;
-            add_header Cache-Control "public";
+            expires 1d;
+            add_header Cache-Control "public, max-age=86400";
         }
 
         # WebSocket — required for real-time HA state updates
@@ -206,8 +206,8 @@ http {
 
         location = /cn-bg.png {
             alias ${OVERRIDE_DIR}/static/cn-bg.png;
-            expires 30d;
-            add_header Cache-Control "public";
+            expires 1d;
+            add_header Cache-Control "public, max-age=86400";
         }
 
         location /api/websocket {
@@ -286,6 +286,23 @@ cp ${OVERRIDE_DIR}/whats-new.json           /config/www/cn-whats-new.json
 cp ${OVERRIDE_DIR}/card-mod.js              /config/www/card-mod.js
 success "Panel + branding JS installed to /config/www/"
 
+# ─── Bubble Card (bundled, namespaced under /cn-cards/) ─────
+# Skip our copy if the customer already has Bubble Card installed via HACS.
+# That avoids duplicate custom-element registration which would crash the
+# dashboard. We never touch /config/www/community/ — that's HACS territory.
+mkdir -p /config/www/cn-cards
+HACS_BUBBLE=/config/www/community/Bubble-Card/bubble-card.js
+HACS_BUBBLE_LC=/config/www/community/bubble-card/bubble-card.js
+if [[ -f "$HACS_BUBBLE" ]] || [[ -f "$HACS_BUBBLE_LC" ]]; then
+    info "HACS Bubble Card detected — skipping bundled copy to avoid conflict"
+    CN_BUBBLE_VIA_HACS=true
+else
+    cp ${OVERRIDE_DIR}/cards/bubble-card.js        /config/www/cn-cards/bubble-card.js
+    cp ${OVERRIDE_DIR}/cards/bubble-pop-up-fix.js  /config/www/cn-cards/bubble-pop-up-fix.js 2>/dev/null || true
+    success "Bubble Card installed to /config/www/cn-cards/"
+    CN_BUBBLE_VIA_HACS=false
+fi
+
 # Register card-mod via Lovelace API (no HA restart needed)
 if [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
     LOVELACE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
@@ -315,6 +332,7 @@ frontend:
   extra_module_url:
     - /local/card-mod.js
     - /local/cn-init.js
+    - /local/cn-cards/bubble-card.js
 
 panel_custom:
   - name: cn-about
@@ -332,6 +350,23 @@ YAML_EOF
         warn "Manual step needed — see /docs/INSTALL.md → 'Manual configuration.yaml edits'"
     fi
     touch "$MARKER"
+fi
+
+# ─── Existing-install reminder for new modules ──────────────
+# We patch configuration.yaml only on first run (behind MARKER). For upgraders,
+# we can't safely auto-edit their file — but we can detect missing entries and
+# print a clear instruction so they know what to add.
+if [[ -f "$MARKER" ]] && [[ "${CN_BUBBLE_VIA_HACS}" != "true" ]]; then
+    if grep -q "extra_module_url" /config/configuration.yaml 2>/dev/null \
+       && ! grep -q "cn-cards/bubble-card.js" /config/configuration.yaml 2>/dev/null; then
+        warn "─────────────────────────────────────────────────────────"
+        warn "Bubble Card is bundled but NOT yet in your extra_module_url."
+        warn "To enable it, edit /config/configuration.yaml and add this"
+        warn "line under your existing 'extra_module_url:' block:"
+        warn "    - /local/cn-cards/bubble-card.js"
+        warn "Then restart Home Assistant Core."
+        warn "─────────────────────────────────────────────────────────"
+    fi
 fi
 
 # Always reload themes (picks up new theme values on version upgrades)

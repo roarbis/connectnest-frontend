@@ -57,6 +57,19 @@ cn_glass:
   sidebar-selected-icon-color: "var(--accent-color)"
   mdc-theme-primary: "var(--accent-color)"
 
+  # ─── Bubble Card branding ─────────────────────────────────
+  # CN-styled defaults for any custom:bubble-card on the dashboard.
+  # Inherits accent/radius/background from the active theme so the
+  # cards stay consistent when switching between glass / dark / light.
+  bubble-accent-color: "var(--accent-color)"
+  bubble-border-radius: "var(--ha-card-border-radius)"
+  bubble-main-background-color: "var(--ha-card-background)"
+  bubble-secondary-background-color: "var(--ha-card-background)"
+  bubble-button-background-color: "var(--ha-card-background)"
+  bubble-icon-background-color: "rgba(21, 199, 180, 0.15)"
+  bubble-main-text-color: "var(--primary-text-color)"
+  bubble-secondary-text-color: "var(--secondary-text-color)"
+
   # ─── Toggles, sliders, switches ──────────────────────────
   paper-toggle-button-checked-bar-color: "var(--accent-color)"
   paper-slider-knob-color: "var(--accent-color)"
