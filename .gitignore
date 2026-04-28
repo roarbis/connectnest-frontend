@@ -22,3 +22,7 @@ __pycache__/
 *.tar
 *.zip
 build/
+
+# Commit message scratch files used by release scripts
+.commit-msg.tmp
+.commit-msg-*.tmp
