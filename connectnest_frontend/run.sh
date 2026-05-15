@@ -29,7 +29,7 @@ SSL=$(jq --raw-output '.ssl // false' "$OPTIONS_FILE")
 CERTFILE=$(jq --raw-output '.certfile // "fullchain.pem"' "$OPTIONS_FILE")
 KEYFILE=$(jq --raw-output '.keyfile // "privkey.pem"' "$OPTIONS_FILE")
 
-ADDON_VERSION="2025.4.12"
+ADDON_VERSION="2025.4.13"
 INGRESS_PORT=8919
 DIRECT_PORT=7080
 OVERRIDE_DIR=/usr/share/nginx/cn-override
@@ -292,7 +292,11 @@ cp ${OVERRIDE_DIR}/js/cn-scrubber.js        /config/www/cn-scrubber.js
 cp ${OVERRIDE_DIR}/js/cn-hide-leaks.js      /config/www/cn-hide-leaks.js
 cp ${OVERRIDE_DIR}/whats-new.json           /config/www/cn-whats-new.json
 cp ${OVERRIDE_DIR}/card-mod.js              /config/www/card-mod.js
-success "Panel + branding JS installed to /config/www/"
+# Wallpaper goes into /config/www/ so themes can reference /local/cn-bg.webp,
+# which works on BOTH the direct port (7080) and the sidebar ingress (8123).
+# A bare /cn-bg.webp url only resolves on 7080 — using /local/ fixes that.
+cp ${OVERRIDE_DIR}/static/cn-bg.webp        /config/www/cn-bg.webp
+success "Panel + branding JS + wallpaper installed to /config/www/"
 
 # ─── Bubble Card (bundled, namespaced under /cn-cards/) ─────
 # Skip our copy if the customer already has Bubble Card installed via HACS.

@@ -10,6 +10,19 @@ to mirror the Home Assistant Core release it is tested against.
 
 ---
 
+## [2025.4.13] — 2026-05-02
+
+### Fixed
+- **Wallpaper missing on sidebar ingress (port 8123)** — themes were referencing
+  `url('/cn-bg.webp')` which the browser resolves relative to the current
+  page's origin. That works on direct port `7080` (where our nginx serves it),
+  but fails on the HA ingress at `8123` because HA Core has no such path.
+  Now `run.sh` copies the WebP into `/config/www/` and all three themes
+  reference `url('/local/cn-bg.webp')` — HA Core serves `/local/` on every
+  port, so the background appears identically via sidebar **and** direct PWA.
+
+---
+
 ## [2025.4.12] — 2026-04-28
 
 ### Added

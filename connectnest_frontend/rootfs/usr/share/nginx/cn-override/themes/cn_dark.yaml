@@ -27,8 +27,9 @@ cn_dark:
         font-size: 30px;
         font-family: baumans;
       }
-  # Global
-  background-image: "center / cover no-repeat fixed url('/cn-bg.webp')"
+  # Global — wallpaper lives at /config/www/cn-bg.webp (copied by run.sh).
+  # /local/ resolves on both port 7080 AND sidebar ingress (8123).
+  background-image: "center / cover no-repeat fixed url('/local/cn-bg.webp')"
   lovelace-background: var(--background-image)
   # Fonts
   primary-font-family: "Raleway,sans-serif"
